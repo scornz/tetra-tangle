@@ -67,7 +67,7 @@ export class Board implements Entity {
         if (val == 0) continue;
 
         const box = new Box();
-        box.position.set(this.width - x, this.height - y, 0);
+        box.position.set(x, this.height - y, 0);
         this.engine.scene.add(box);
       }
     }
