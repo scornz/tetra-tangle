@@ -32,7 +32,13 @@ export class MainScene implements Experience {
     // box.rotation.y = Math.PI / 4;
     // box.position.set(0, 0.5, 0);
 
-    const board = new Board(10, 22, true, this.engine);
+    const board = new Board(
+      this.engine,
+      10,
+      22,
+      new THREE.Vector3(-4.5, 0, 0),
+      true
+    );
     board.initialize();
 
     // this.engine.scene.add(box);

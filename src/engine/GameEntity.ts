@@ -8,13 +8,16 @@ import { Engine } from "engine/Engine";
  * automatically add this item to the scene.
  */
 export class GameEntity implements Entity {
-  protected obj!: THREE.Object3D;
+  public obj!: THREE.Object3D;
 
   constructor(protected engine: Engine, obj?: THREE.Object3D) {
     // If no object was provided, simply create an empty object and that to the scene
     if (!obj) {
       this.obj = new THREE.Object3D();
+    } else {
+      this.obj = obj;
     }
+
     // Add this object to the scene
     engine.scene.add(this.obj);
   }

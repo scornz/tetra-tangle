@@ -16,8 +16,8 @@ export class Camera implements Entity {
       0.1,
       1000
     );
-    this.instance.position.z = 15;
-    this.instance.position.y = 2;
+    this.instance.position.z = 18;
+    this.instance.position.y = 11;
     //this.instance.rotation.y = Math.PI;
     this.engine.scene.add(this.instance);
   }
