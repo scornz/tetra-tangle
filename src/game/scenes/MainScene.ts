@@ -3,6 +3,7 @@ import { Board } from "game/Board";
 import { Experience } from "engine/Experience";
 import { Resource } from "engine/Resources";
 import { Engine } from "engine/Engine";
+import { Tetromino, TetrominoType } from "game/objects/Tetromino";
 
 export class MainScene implements Experience {
   resources: Resource[] = [];
@@ -32,6 +33,8 @@ export class MainScene implements Experience {
     // box.rotation.y = Math.PI / 4;
     // box.position.set(0, 0.5, 0);
 
+    // Add a keydown event listener to the canvas
+
     const board = new Board(
       this.engine,
       10,
@@ -40,6 +43,24 @@ export class MainScene implements Experience {
       true
     );
     board.initialize();
+
+    this.engine.canvas.addEventListener(
+      "keydown",
+      (e) => {
+        if (e.key == "j") {
+          const tetromino = new Tetromino(this.engine, board, TetrominoType.I);
+
+          // this.board.spawnTetromino();
+        }
+
+        if (e.key == "k") {
+          const tetromino = new Tetromino(this.engine, board, TetrominoType.Z);
+
+          // this.board.spawnTetromino();
+        }
+      },
+      false
+    );
 
     // this.engine.scene.add(box);
   }

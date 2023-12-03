@@ -31,7 +31,7 @@ const TESTING_LAYOUT: number[][] = [
   [0, 1, 7, 7, 3, 6, 6, 7, 2, 2],
   [0, 1, 7, 3, 3, 3, 6, 4, 2, 2],
   [8, 1, 0, 1, 1, 1, 1, 4, 4, 4],
-];
+].reverse();
 
 const COLORS: { [id: string]: THREE.ColorRepresentation } = {
   1: 0x6e9fbe,
@@ -60,8 +60,8 @@ export class Board implements Entity {
 
   constructor(
     private engine: Engine,
-    private width: number = 10,
-    private height: number = 22,
+    public width: number = 10,
+    public height: number = 22,
     private pos: THREE.Vector3 = new THREE.Vector3(),
     testing: boolean = false
   ) {
@@ -80,9 +80,16 @@ export class Board implements Entity {
         if (val == 0) continue;
 
         const cell = new Cell(this.engine, COLORS[val]);
-        cell.obj.position.set(x, this.height - y, 0).add(this.pos);
+        cell.obj.position.set(x, y, 0).add(this.pos);
       }
     }
+  }
+
+  /**
+   * Converts a world position to a board position and returns the value at that position.
+   */
+  boardToWorld(x: number, y: number): THREE.Vector3 {
+    return new THREE.Vector3(x, y, 0).add(this.pos);
   }
 
   update(delta: number): void {
