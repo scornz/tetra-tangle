@@ -40,7 +40,7 @@ export class MainScene extends Scene {
       "keydown",
       (e) => {
         if (e.key == "j") {
-          const tetromino = new Tetromino(this, board, TetrominoType.I);
+          const tetromino = new Tetromino(this, board, TetrominoType.T);
 
           // this.board.spawnTetromino();
         }

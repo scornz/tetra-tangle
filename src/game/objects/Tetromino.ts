@@ -3,7 +3,12 @@ import { GameEntity } from "engine/GameEntity";
 import { Board } from "game/Board";
 import { Cell } from "game/objects/Cell";
 import { Scene } from "engine/Scene";
-import { TETRIMINO_SHAPES } from "game/data/TetrominoData";
+import {
+  I_WALL_KICKS,
+  JLTSZ_WALL_KICKS,
+  TETRIMINO_SHAPES,
+} from "game/data/TetrominoData";
+import { ALL_CONTROLS } from "game/data/Controls";
 
 /**
  * The 7 tetromino types (plus an 8th debuggable)
@@ -54,10 +59,9 @@ export class Tetromino extends GameEntity {
   private moveTime: number = 0;
 
   constructor(scene: Scene, private board: Board, private type: TetrominoType) {
-    //
     super(scene);
     // Spawn the tetromino at the top middle of the board
-    this.pos.set(0, 19);
+    this.pos.set(3, 19);
 
     // Create cells that make up this tetromino
     const shape = TETRIMINO_SHAPES[type][this.rot];
@@ -83,23 +87,82 @@ export class Tetromino extends GameEntity {
 
   handleMovement(e: KeyboardEvent): void {
     // Left and right arrow keys move piece left and right
-    console.log(this.pos);
-    if (e.key == "ArrowLeft") {
-      // Check to see if the new position would be out of bounds or collide with other cells
-      if (!this.checkCollision(this.pos.clone().add(new THREE.Vector2(-1, 0))))
-        this.pos.x--;
-    } else if (e.key == "ArrowRight") {
-      if (!this.checkCollision(this.pos.clone().add(new THREE.Vector2(1, 0))))
-        this.pos.x++;
-    } else if (e.key == "ArrowUp") {
+    if (e.key == ALL_CONTROLS.moveLeft) {
+      // Move 1 unit to the left
+      this.move(-1, 0);
+    } else if (e.key == ALL_CONTROLS.moveRight) {
+      // Move 1 unit to the right
+      this.move(1, 0);
+    } else if (e.key == ALL_CONTROLS.rotateRight) {
       // Rotate the tetromino
-      this.rot = (this.rot + 1) % 4;
+      this.rotate((this.rot + 1) % 4);
+    } else if (e.key == ALL_CONTROLS.rotateLeft) {
+      // Rotate the tetromino left
+      this.rotate((this.rot + 3) % 4);
     }
   }
 
-  checkCollision(pos: THREE.Vector2): boolean {
+  /**
+   * Check for obstructions, and move the tetromino by the given amount.
+   * @param x The amount to move the tetromino in the x direction
+   * @param y The amount to move the tetromino in the y direction
+   */
+  private move(x: number, y: number): void {
+    const newPos = new THREE.Vector2(x, y).add(this.pos);
+    // Check for a collision at the new position
+    const collision = this.checkCollision(newPos, this.rot);
+
+    // Do not move if there is a collision at the new position
+    if (collision) return;
+
+    // Set the new position
+    this.pos.copy(newPos);
+  }
+
+  /**
+   * Rotate the tetromino to the given rotation, if possible. If not possible,
+   * then offset using SRS (super rotation system).
+   * @param rot The rotation to rotate the tetromino to
+   */
+  private rotate(rot: number): void {
+    // Do not rotate if this is an O tetromino
+    if (this.type == TetrominoType.O) return;
+
+    const offsets =
+      this.type == TetrominoType.I
+        ? I_WALL_KICKS[this.rot][rot]
+        : JLTSZ_WALL_KICKS[this.rot][rot];
+
+    // Check each offset, and succeed at the first non-collision
+    for (const offset of offsets) {
+      // Check for a collision at the new position
+      console.log(offset);
+      const newPos = this.pos.clone().add(offset);
+      const collision = this.checkCollision(newPos, rot);
+
+      if (collision) continue;
+
+      // No collision!
+      this.rot = rot;
+      this.pos.copy(newPos);
+      break;
+    }
+
+    // If NONE succeed, do nothing
+  }
+
+  /**
+   * Check to see if this tetromino would collide with any other cells on the board
+   * if it were to be moved to the given position.
+   * @param pos The position to check for collision
+   * @returns True if there is a collision, false otherwise
+   */
+  checkCollision(
+    pos: THREE.Vector2 = this.pos,
+    rot: number = this.rot
+  ): boolean {
     // Check if any of the cells would now be out of bounds
-    const positions = this.getBoardPositions(pos);
+    const positions = this.getBoardPositions(pos, rot);
     for (const pos of positions) {
       // Check if out of bounds
       if (pos.x < 0 || pos.x >= this.board.width) {
@@ -155,7 +218,7 @@ export class Tetromino extends GameEntity {
     this.moveTime += delta;
     if (this.moveTime > 1) {
       this.moveTime = 0;
-      this.pos.y--;
+      this.move(0, -1);
     }
 
     this.updateCellPositions();
