@@ -10,6 +10,7 @@ import {
 } from "game/data/TetrominoData";
 import { ALL_CONTROLS, MOVEMENT } from "game/data/Controls";
 import { Game } from "game/Game";
+import { InputType } from "engine/Input";
 
 /**
  * The 7 tetromino types (plus an 8th debuggable)
@@ -61,13 +62,14 @@ export class Tetromino extends GameEntity {
 
   private dropTime: number = 0;
   private lockDownTime: number = 0;
+  private arrTime: number = MOVEMENT.ARR;
 
   // Move counters used for lock down timer
   private moveCounter: number = 0;
   private prevMoveCounter: number = 0;
 
   // Callback for handling movement, store this for later removal
-  private handleMovementCallback: (e: KeyboardEvent) => void;
+  private handleInputCallback: (input: InputType) => void;
 
   constructor(
     scene: Scene,
@@ -96,30 +98,31 @@ export class Tetromino extends GameEntity {
     // Set positions of cells
     this.updateCellPositions();
 
-    this.handleMovementCallback = this.handleMovement.bind(this);
-    this.scene.engine.canvas.addEventListener(
-      "keydown",
-      this.handleMovementCallback,
-      false
-    );
+    this.handleInputCallback = this.handleInput.bind(this);
+    this.scene.engine.input.addListener(this.handleInputCallback);
   }
 
-  handleMovement(e: KeyboardEvent): void {
-    // Left and right arrow keys move piece left and right
-    if (e.code == ALL_CONTROLS.moveLeft) {
-      // Move 1 unit to the left
-      this.move(-1, 0);
-    } else if (e.code == ALL_CONTROLS.moveRight) {
-      // Move 1 unit to the right
-      this.move(1, 0);
-    } else if (e.code == ALL_CONTROLS.rotateRight) {
-      // Rotate the tetromino
-      this.rotate((this.rot + 1) % 4);
-    } else if (e.code == ALL_CONTROLS.rotateLeft) {
-      // Rotate the tetromino left
-      this.rotate((this.rot + 3) % 4);
-    } else if (e.code == ALL_CONTROLS.hardDrop) {
-      this.place();
+  handleInput(input: InputType): void {
+    // Go through available input and handle accordingly
+    switch (input) {
+      case InputType.MOVE_LEFT:
+        this.move(-1, 0);
+        break;
+      case InputType.MOVE_RIGHT:
+        this.move(1, 0);
+        break;
+      case InputType.ROTATE_LEFT:
+        this.rotate((this.rot + 3) % 4);
+        break;
+      case InputType.ROTATE_RIGHT:
+        this.rotate((this.rot + 1) % 4);
+        break;
+      case InputType.ROTATE_180:
+        this.rotate((this.rot + 2) % 4);
+        break;
+      case InputType.HARD_DROP:
+        this.place();
+        break;
     }
   }
 
@@ -280,6 +283,25 @@ export class Tetromino extends GameEntity {
       this.move(0, -1);
     }
 
+    // If the held key is movement to the right or left
+    if (
+      (this.scene.engine.input.keyHeld == InputType.MOVE_LEFT ||
+        this.scene.engine.input.keyHeld == InputType.MOVE_RIGHT) &&
+      this.scene.engine.input.keyHeldTime > MOVEMENT.DAS
+    ) {
+      if (this.arrTime >= MOVEMENT.ARR) {
+        // Move the tetromino
+        this.move(
+          this.scene.engine.input.keyHeld == InputType.MOVE_LEFT ? -1 : 1,
+          0
+        );
+        this.arrTime = 0;
+      }
+      this.arrTime += delta;
+    } else {
+      this.arrTime = 0;
+    }
+
     if (this.checkLockDown()) {
       // Reset the counter if the tetromino has been moved and is less than max moves
       if (
@@ -307,10 +329,6 @@ export class Tetromino extends GameEntity {
   destroy(): void {
     super.destroy();
     // Remove event listeners
-    this.scene.engine.canvas.removeEventListener(
-      "keydown",
-      this.handleMovementCallback,
-      false
-    );
+    this.scene.engine.input.removeListener(this.handleInputCallback);
   }
 }

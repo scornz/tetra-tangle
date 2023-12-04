@@ -8,6 +8,7 @@ import { InfoConfig, InfoUI } from "./interface/InfoUI";
 import { Loader } from "./interface/Loader";
 import { Raycaster } from "./Raycaster";
 import { Scene } from "./Scene";
+import { Input } from "./Input";
 
 export class Engine {
   public readonly camera!: Camera;
@@ -21,6 +22,7 @@ export class Engine {
   public readonly canvas!: HTMLCanvasElement;
   public readonly resources!: Resources;
   private readonly loader!: Loader;
+  public readonly input!: Input;
 
   constructor({
     canvas,
@@ -49,6 +51,7 @@ export class Engine {
     this.renderEngine = new RenderEngine(this);
     this.resources = new Resources(this.scene.resources);
     this.loader = new Loader();
+    this.input = new Input(this);
 
     this.resources.on("loaded", () => {
       this.scene.init();
@@ -81,6 +84,7 @@ export class Engine {
     this.renderEngine.update();
     this.scene.update(delta);
     this.debug.update();
+    this.input.update(delta);
   }
 
   resize() {
