@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import { GameEntity } from "engine/GameEntity";
-import { Engine } from "engine/Engine";
 import { Board } from "game/Board";
 import { Cell } from "game/objects/Cell";
 import { Scene } from "engine/Scene";
+import { TETRIMINO_SHAPES } from "game/data/TetrominoData";
 
 /**
  * The 7 tetromino types (plus an 8th debuggable)
@@ -35,54 +35,6 @@ export const TETROMINO_COLORS: {
 };
 
 /**
- * 2 row by 4 column matrices for each tetromino type available. These will
- * be inserted into the board layout when a tetromino is placed. Position of
- * these tetrominos will be relative to bottom left corner of the 2x4 matrix.
- */
-export const TETRIMINO_SHAPES: { [id in TetrominoType]: number[][] } = {
-  // I
-  1: [
-    [0, 0, 0, 0],
-    [1, 1, 1, 1],
-  ].reverse(),
-  // O
-  2: [
-    [0, 2, 2, 0],
-    [0, 2, 2, 0],
-  ].reverse(),
-  // T
-  3: [
-    [0, 3, 0, 0],
-    [3, 3, 3, 0],
-  ].reverse(),
-  // J
-  4: [
-    [4, 0, 0, 0],
-    [4, 4, 4, 0],
-  ].reverse(),
-  // L
-  5: [
-    [0, 0, 5, 0],
-    [5, 5, 5, 0],
-  ].reverse(),
-  // S
-  6: [
-    [0, 6, 6, 0],
-    [6, 6, 0, 0],
-  ].reverse(),
-  // Z
-  7: [
-    [7, 7, 0, 0],
-    [0, 7, 7, 0],
-  ].reverse(),
-  // Debug
-  8: [
-    [8, 8, 8, 8],
-    [8, 8, 8, 8],
-  ].reverse(),
-};
-
-/**
  * A falling tetromino in the game that is rotatable and placeable on the board.
  */
 export class Tetromino extends GameEntity {
@@ -91,16 +43,24 @@ export class Tetromino extends GameEntity {
   // The location of this tetromino on the board
   private pos: THREE.Vector2 = new THREE.Vector2(0, 0);
 
+  /* The rotation of this tetromino
+  0 - normal
+  1 - 90 degrees
+  2 - 180 degrees
+  3 - 270 degrees
+  */
+  private rot: number = 0;
+
   private moveTime: number = 0;
 
   constructor(scene: Scene, private board: Board, private type: TetrominoType) {
     //
     super(scene);
     // Spawn the tetromino at the top middle of the board
-    this.pos.set(0, 21);
+    this.pos.set(0, 19);
 
     // Create cells that make up this tetromino
-    const shape = TETRIMINO_SHAPES[type];
+    const shape = TETRIMINO_SHAPES[type][this.rot];
 
     // Create the necessary cells
     for (let r = 0; r < shape.length; r++) {
@@ -114,6 +74,45 @@ export class Tetromino extends GameEntity {
 
     // Set positions of cells
     this.updateCellPositions();
+    this.scene.engine.canvas.addEventListener(
+      "keydown",
+      this.handleMovement.bind(this),
+      false
+    );
+  }
+
+  handleMovement(e: KeyboardEvent): void {
+    // Left and right arrow keys move piece left and right
+    console.log(this.pos);
+    if (e.key == "ArrowLeft") {
+      // Check to see if the new position would be out of bounds or collide with other cells
+      if (!this.checkCollision(this.pos.clone().add(new THREE.Vector2(-1, 0))))
+        this.pos.x--;
+    } else if (e.key == "ArrowRight") {
+      if (!this.checkCollision(this.pos.clone().add(new THREE.Vector2(1, 0))))
+        this.pos.x++;
+    } else if (e.key == "ArrowUp") {
+      // Rotate the tetromino
+      this.rot = (this.rot + 1) % 4;
+    }
+  }
+
+  checkCollision(pos: THREE.Vector2): boolean {
+    // Check if any of the cells would now be out of bounds
+    const positions = this.getBoardPositions(pos);
+    for (const pos of positions) {
+      // Check if out of bounds
+      if (pos.x < 0 || pos.x >= this.board.width) {
+        return true;
+      }
+
+      // Check to see if the position on the board is filled
+      if (this.board.isFilled(pos.x, pos.y)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -135,13 +134,16 @@ export class Tetromino extends GameEntity {
    * occupied by cells.
    * @returns The board positions that this tetromino occupies
    */
-  getBoardPositions(): THREE.Vector2[] {
-    const shape = TETRIMINO_SHAPES[this.type];
+  getBoardPositions(
+    pos: THREE.Vector2 = this.pos,
+    rot: number = this.rot
+  ): THREE.Vector2[] {
+    const shape = TETRIMINO_SHAPES[this.type][rot];
     const positions: THREE.Vector2[] = [];
     for (let y = 0; y < shape.length; y++) {
       for (let x = 0; x < shape[y].length; x++) {
         if (shape[y][x] != 0) {
-          positions.push(new THREE.Vector2(x, y).add(this.pos));
+          positions.push(new THREE.Vector2(x, y).add(pos));
         }
       }
     }

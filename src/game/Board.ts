@@ -95,6 +95,13 @@ export class Board extends GameEntity {
     return new THREE.Vector3(x, y, 0).add(this.pos);
   }
 
+  /**
+   * Returns true if the given position has a cell (a non-zero value in it).
+   */
+  isFilled(x: number, y: number): boolean {
+    return this.layout[y][x] != 0;
+  }
+
   update(delta: number): void {
     // throw new Error("Method not implemented.");
   }

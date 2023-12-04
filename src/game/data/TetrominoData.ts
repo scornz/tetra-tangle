@@ -1,13 +1,11 @@
 import { TetrominoType } from "game/objects/Tetromino";
 
 /*
- * A falling tetromino in the game that is rotatable and placeable on the board.
+ * Information about the shape of a tetromino. Each tetromino has 4 possible
+  rotations, each represented by a 2D matrix.
  */
 type TetriminoShapeData = {
-  0: number[][];
-  1: number[][];
-  2: number[][];
-  3: number[][];
+  [key: number]: number[][];
 };
 
 /**
