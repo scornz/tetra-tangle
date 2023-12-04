@@ -131,6 +131,8 @@ export class Board extends GameEntity {
    * Returns true if the given position has a cell (a non-zero value in it).
    */
   isFilled(x: number, y: number): boolean {
+    if (x < 0 || x >= this.width || y < 0 || y >= this.height) return true;
+
     return this.layout[y][x] != 0;
   }
 

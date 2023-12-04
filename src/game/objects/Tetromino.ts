@@ -125,7 +125,9 @@ export class Tetromino extends GameEntity {
         this.rotate((this.rot + 1) % 4);
         break;
       case InputType.ROTATE_180:
-        this.rotate((this.rot + 2) % 4);
+        // Rotate twice
+        this.rotate((this.rot + 1) % 4);
+        this.rotate((this.rot + 1) % 4);
         break;
       case InputType.HARD_DROP:
         this.place();

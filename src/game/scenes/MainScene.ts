@@ -34,24 +34,6 @@ export class MainScene extends Scene {
 
     const game = new Game(this);
 
-    this.engine.canvas.addEventListener(
-      "keydown",
-      (e) => {
-        if (e.key == "j") {
-          const tetromino = new Tetromino(this, game.board, TetrominoType.T);
-
-          // this.board.spawnTetromino();
-        }
-
-        if (e.key == "k") {
-          const tetromino = new Tetromino(this, game.board, TetrominoType.Z);
-
-          // this.board.spawnTetromino();
-        }
-      },
-      false
-    );
-
     // this.engine.scene.add(box);
   }
 }
