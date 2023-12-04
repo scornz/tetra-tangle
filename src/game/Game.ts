@@ -21,6 +21,9 @@ export class Game extends GameEntity {
   private nextPieces: TetrominoType[] = [];
   private bag: TetrominoType[] = [];
 
+  // Whether or not the game is active
+  active: boolean = true;
+
   constructor(protected scene: Scene) {
     super(scene);
 
@@ -53,6 +56,14 @@ export class Game extends GameEntity {
   spawn() {
     const piece = this.getNextPiece();
     this.tetromino = new Tetromino(this.scene, this.board, piece);
+
+    // If this tetromino collides with the board, then the game is over
+    if (this.tetromino.checkCollision()) {
+      // Immediatley destroy the tetromino, but leave the cells
+      this.tetromino.destroy();
+      // GAME OVER condition
+      this.active = false;
+    }
   }
 
   /**
@@ -97,7 +108,7 @@ export class Game extends GameEntity {
   }
 
   update(_delta: number): void {
-    if (this.tetromino?.placed) {
+    if (this.tetromino?.placed && this.active) {
       this.spawn();
     }
   }
