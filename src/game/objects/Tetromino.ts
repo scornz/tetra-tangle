@@ -86,12 +86,12 @@ export class Tetromino extends GameEntity {
   ) {
     super(scene);
     // Spawn the tetromino at the top middle of the board
-    this.pos.set(3, 19);
+    this.pos.set(3, 18);
     // Get the current game from the board
     this.game = board.game;
     // Event listener for input
     this.input = scene.engine.input;
-
+    // Create a new ghost preview tetromino to help with placement
     this.ghost = new GhostTetromino(scene, board, type);
 
     // Create cells that make up this tetromino

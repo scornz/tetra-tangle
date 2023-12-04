@@ -1,10 +1,6 @@
 import * as THREE from "three";
-import { Board } from "game/containers/Board";
-import { Resource } from "engine/Resources";
-import { Engine } from "engine/Engine";
-import { Tetromino, TetrominoType } from "game/objects/Tetromino";
-import { Scene } from "engine/Scene";
-import { Game } from "game/Game";
+import { Scene, Resource } from "engine";
+import { Game } from "game";
 
 export class MainScene extends Scene {
   resources: Resource[] = [];
@@ -19,7 +15,25 @@ export class MainScene extends Scene {
     plane.position.y = -0.5;
     plane.receiveShadow = true;
 
+    const leftWall = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 20, 1),
+      new THREE.MeshStandardMaterial({ color: 0xffffff })
+    );
+    leftWall.position.x = -5.5;
+    leftWall.position.y = 9.5;
+    leftWall.castShadow = true;
+
+    const rightWall = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 20, 1),
+      new THREE.MeshStandardMaterial({ color: 0xffffff })
+    );
+    rightWall.position.x = 5.5;
+    rightWall.position.y = 9.5;
+    rightWall.castShadow = true;
+
     this.add(plane);
+    this.add(leftWall);
+    this.add(rightWall);
     this.add(new THREE.AmbientLight(0xffffff, 0.5));
 
     let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -28,13 +42,6 @@ export class MainScene extends Scene {
 
     this.add(directionalLight);
 
-    // const box = new Box();
-    // box.castShadow = true;
-    // box.rotation.y = Math.PI / 4;
-    // box.position.set(0, 0.5, 0);
-
     const game = new Game(this);
-
-    // this.engine.scene.add(box);
   }
 }
