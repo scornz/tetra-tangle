@@ -106,7 +106,6 @@ export class Tetromino extends GameEntity {
 
   handleMovement(e: KeyboardEvent): void {
     // Left and right arrow keys move piece left and right
-    console.log(e);
     if (e.code == ALL_CONTROLS.moveLeft) {
       // Move 1 unit to the left
       this.move(-1, 0);
@@ -155,7 +154,6 @@ export class Tetromino extends GameEntity {
       this.moveCounter++;
       return true;
     }
-    console.log("rotating?");
 
     const offsets =
       this.type == TetrominoType.I
@@ -165,7 +163,6 @@ export class Tetromino extends GameEntity {
     // Check each offset, and succeed at the first non-collision
     for (const offset of offsets) {
       // Check for a collision at the new position
-      console.log(offset);
       const newPos = this.pos.clone().add(offset);
       const collision = this.checkCollision(newPos, rot);
 
