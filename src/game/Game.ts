@@ -1,8 +1,6 @@
 import * as THREE from "three";
-import { GameEntity } from "engine/GameEntity";
-import { Scene } from "engine/Scene";
-import { Board } from "./containers/Board";
-import { Preview } from "./containers";
+import { Scene, GameEntity, InputType } from "engine";
+import { Hold, Preview, Board } from "./containers";
 import { Tetromino, TetrominoType } from "./objects";
 import { shuffle } from "utils";
 
@@ -16,13 +14,20 @@ export class Game extends GameEntity {
 
   public readonly board!: Board;
   public readonly preview!: Preview;
+  public readonly hold!: Hold;
+
   private tetromino: Tetromino | null = null;
+  private heldTetromino: TetrominoType | null = null;
+  private alreadyHeld: boolean = false;
 
   private nextPieces: TetrominoType[] = [];
   private bag: TetrominoType[] = [];
 
   // Whether or not the game is active
   active: boolean = true;
+
+  // Callback for handling movement, store this for later removal
+  private handleInputCallback: (input: InputType) => void;
 
   constructor(protected scene: Scene) {
     super(scene);
@@ -50,12 +55,40 @@ export class Game extends GameEntity {
       this.nextPieces.push(piece);
     }
 
+    this.hold = new Hold(scene, new THREE.Vector3(-10, 18, 0));
     this.spawn();
+
+    this.handleInputCallback = this.handleInput.bind(this);
+    this.scene.engine.input.addListener(this.handleInputCallback);
+  }
+
+  handleInput(input: InputType) {
+    if (input == InputType.HOLD && !this.alreadyHeld) {
+      if (this.heldTetromino) {
+        // If there is already a held tetromino, then swap it with the current
+        const temp = this.heldTetromino;
+        this.heldTetromino = this.tetromino!.type;
+        this.hold.set(this.tetromino!.type);
+        this.tetromino!.demolish();
+        this.tetromino = new Tetromino(this.scene, this.board, temp);
+      } else {
+        // If there is no held tetromino, then simply hold the current one
+        this.heldTetromino = this.tetromino!.type;
+        this.hold.set(this.heldTetromino);
+        this.tetromino!.demolish();
+        this.spawn();
+      }
+      // Prevent user from holding another piece until another one spawns
+      this.alreadyHeld = true;
+    }
   }
 
   spawn() {
     const piece = this.getNextPiece();
     this.tetromino = new Tetromino(this.scene, this.board, piece);
+
+    // Allow for the user to hold another piece
+    this.alreadyHeld = false;
 
     // If this tetromino collides with the board, then the game is over
     if (this.tetromino.checkCollision()) {

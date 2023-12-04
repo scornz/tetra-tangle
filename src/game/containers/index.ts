@@ -4,3 +4,4 @@
 
 export * from "./Board";
 export * from "./Preview";
+export * from "./Hold";

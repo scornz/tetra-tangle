@@ -353,4 +353,13 @@ export class Tetromino extends GameEntity {
     // Destroy the ghost
     this.ghost.destroy();
   }
+
+  /**
+   * Equivalent functionality to destroy, but also destroys the cells that make
+   * up this tetromino.
+   */
+  demolish(): void {
+    this.destroy();
+    this.cells.forEach((cell) => cell.destroy());
+  }
 }
