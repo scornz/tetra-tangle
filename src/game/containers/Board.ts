@@ -7,6 +7,7 @@ import { Entity } from "engine/Entity";
 import { Scene } from "engine/Scene";
 import { GameEntity } from "engine/GameEntity";
 import { Game } from "game/Game";
+import { Tetromino, TetrominoType } from "game/objects/Tetromino";
 
 /**
  * An example layout of some possible tetrominos
@@ -61,6 +62,11 @@ export class Board extends GameEntity {
    */
   private layout: number[][];
 
+  /**
+   * Cell objects that make up the visual representation of the board.
+   */
+  private layoutCells: Cell[][];
+
   constructor(
     protected scene: Scene,
     public readonly game: Game,
@@ -74,6 +80,11 @@ export class Board extends GameEntity {
     this.layout = !testing
       ? Array.from(Array(height), (_) => Array(width).fill(0))
       : TESTING_LAYOUT;
+
+    // Initialize all cells to be null to start
+    this.layoutCells = Array.from(Array(height), (_) =>
+      Array(width).fill(null)
+    );
   }
 
   initialize(): void {
@@ -86,8 +97,27 @@ export class Board extends GameEntity {
 
         const cell = new Cell(this.scene, COLORS[val]);
         cell.obj.position.set(x, y, 0).add(this.pos);
+        this.layoutCells[y][x] = cell;
       }
     }
+  }
+
+  /**
+   * Place a given tetromino in the board at the given locations. Simply set the
+   * values in place, and take the cells from the tetromino and add them to the
+   * registered ones with the board.
+   * @param positions Locations of cells to place
+   * @param type Type of tetromino to place
+   */
+  place(tetromino: Tetromino): void {
+    const positions = tetromino.getBoardPositions();
+    for (let i = 0; i < positions.length; i++) {
+      const pos = positions[i];
+      this.layout[pos.y][pos.x] = tetromino.type;
+      this.layoutCells[pos.y][pos.x] = tetromino.cells[i];
+    }
+    // Remove this tetromino from the scene
+    tetromino.destroy();
   }
 
   /**

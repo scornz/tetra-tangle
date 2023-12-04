@@ -31,9 +31,9 @@ export const ALL_CONTROLS = {
   moveLeft: "ArrowLeft",
   moveRight: "ArrowRight",
   rotateRight: "ArrowUp",
-  rotateLeft: "z",
-  rotate180: "x",
-  hold: "c",
+  rotateLeft: "KeyZ",
+  rotate180: "KeyX",
+  hold: "KeyC",
   softDrop: "ArrowDown",
   hardDrop: "Space",
 };

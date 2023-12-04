@@ -45,7 +45,7 @@ export const TETROMINO_COLORS: {
  */
 export class Tetromino extends GameEntity {
   // Objects that make up this tetromino
-  private cells: Cell[] = new Array<Cell>();
+  public readonly cells: Cell[] = new Array<Cell>();
   // The location of this tetromino on the board
   private pos: THREE.Vector2 = new THREE.Vector2(0, 0);
   // Reference to the game that this tetromino is a part of
@@ -66,7 +66,14 @@ export class Tetromino extends GameEntity {
   private moveCounter: number = 0;
   private prevMoveCounter: number = 0;
 
-  constructor(scene: Scene, private board: Board, private type: TetrominoType) {
+  // Callback for handling movement, store this for later removal
+  private handleMovementCallback: (e: KeyboardEvent) => void;
+
+  constructor(
+    scene: Scene,
+    public readonly board: Board,
+    public readonly type: TetrominoType
+  ) {
     super(scene);
     // Spawn the tetromino at the top middle of the board
     this.pos.set(3, 19);
@@ -88,27 +95,32 @@ export class Tetromino extends GameEntity {
 
     // Set positions of cells
     this.updateCellPositions();
+
+    this.handleMovementCallback = this.handleMovement.bind(this);
     this.scene.engine.canvas.addEventListener(
       "keydown",
-      this.handleMovement.bind(this),
+      this.handleMovementCallback,
       false
     );
   }
 
   handleMovement(e: KeyboardEvent): void {
     // Left and right arrow keys move piece left and right
-    if (e.key == ALL_CONTROLS.moveLeft) {
+    console.log(e);
+    if (e.code == ALL_CONTROLS.moveLeft) {
       // Move 1 unit to the left
       this.move(-1, 0);
-    } else if (e.key == ALL_CONTROLS.moveRight) {
+    } else if (e.code == ALL_CONTROLS.moveRight) {
       // Move 1 unit to the right
       this.move(1, 0);
-    } else if (e.key == ALL_CONTROLS.rotateRight) {
+    } else if (e.code == ALL_CONTROLS.rotateRight) {
       // Rotate the tetromino
       this.rotate((this.rot + 1) % 4);
-    } else if (e.key == ALL_CONTROLS.rotateLeft) {
+    } else if (e.code == ALL_CONTROLS.rotateLeft) {
       // Rotate the tetromino left
       this.rotate((this.rot + 3) % 4);
+    } else if (e.code == ALL_CONTROLS.hardDrop) {
+      this.place();
     }
   }
 
@@ -116,18 +128,20 @@ export class Tetromino extends GameEntity {
    * Check for obstructions, and move the tetromino by the given amount.
    * @param x The amount to move the tetromino in the x direction
    * @param y The amount to move the tetromino in the y direction
+   * @returns True if the tetromino was moved, false otherwise
    */
-  private move(x: number, y: number): void {
+  private move(x: number, y: number): boolean {
     const newPos = new THREE.Vector2(x, y).add(this.pos);
     // Check for a collision at the new position
     const collision = this.checkCollision(newPos, this.rot);
 
     // Do not move if there is a collision at the new position
-    if (collision) return;
+    if (collision) return false;
 
     // Set the new position
     this.pos.copy(newPos);
     this.moveCounter++;
+    return true;
   }
 
   /**
@@ -135,9 +149,13 @@ export class Tetromino extends GameEntity {
    * then offset using SRS (super rotation system).
    * @param rot The rotation to rotate the tetromino to
    */
-  private rotate(rot: number): void {
-    // Do not rotate if this is an O tetromino
-    if (this.type == TetrominoType.O) return;
+  private rotate(rot: number): boolean {
+    // We can always "rotate" an O tetromino, it just doesn't really do anything
+    if (this.type == TetrominoType.O) {
+      this.moveCounter++;
+      return true;
+    }
+    console.log("rotating?");
 
     const offsets =
       this.type == TetrominoType.I
@@ -157,10 +175,11 @@ export class Tetromino extends GameEntity {
       this.rot = rot;
       this.pos.copy(newPos);
       this.moveCounter++;
-      break;
+      return true;
     }
 
     // If NONE succeed, do nothing
+    return false;
   }
 
   /**
@@ -241,6 +260,20 @@ export class Tetromino extends GameEntity {
     return false;
   }
 
+  /**
+   * Shift the tetromino down by 1 unit until there is a collision, then place the
+   * tetromino on the board.
+   */
+  place(): void {
+    // Keep moving until the piece stops
+    while (this.move(0, -1));
+
+    // Update the positions from the instantstaneous drop
+    this.updateCellPositions();
+    // Place the tetromino on the board
+    this.board.place(this);
+  }
+
   update(delta: number): void {
     // Handle falling of tetromino
     this.dropTime += delta;
@@ -263,7 +296,7 @@ export class Tetromino extends GameEntity {
       this.lockDownTime += delta;
       if (this.lockDownTime > 0.5) {
         // Lock down the tetromino
-        console.log("Locking down tetromino");
+        this.place();
       }
     } else {
       // Reset move counters
@@ -272,5 +305,15 @@ export class Tetromino extends GameEntity {
     }
 
     this.updateCellPositions();
+  }
+
+  destroy(): void {
+    super.destroy();
+    // Remove event listeners
+    this.scene.engine.canvas.removeEventListener(
+      "keydown",
+      this.handleMovementCallback,
+      false
+    );
   }
 }

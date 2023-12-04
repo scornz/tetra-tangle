@@ -23,4 +23,9 @@ export class GameEntity implements Entity {
   }
 
   update(_delta: number): void {}
+
+  destroy(): void {
+    // Remove this object from the scene and references to it
+    this.scene.removeEntity(this, this.obj);
+  }
 }

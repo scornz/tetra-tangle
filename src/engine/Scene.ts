@@ -7,7 +7,7 @@ export class Scene extends THREE.Scene implements Entity {
   /**
    * All entities in the scene that need to be updated.
    */
-  protected entities: Entity[] = [];
+  protected entities: Set<Entity> = new Set<Entity>();
 
   resources: Resource[] = [];
 
@@ -27,10 +27,18 @@ export class Scene extends THREE.Scene implements Entity {
    * Add an entity to the scene, and also add the object to the scene if provided.
    */
   addEntity(entity: Entity, obj?: THREE.Object3D) {
-    this.entities.push(entity);
+    this.entities.add(entity);
     // If an object was provided, add that to the scene as well
     if (obj) {
       this.add(obj);
+    }
+  }
+
+  removeEntity(entity: Entity, obj?: THREE.Object3D) {
+    this.entities.delete(entity);
+    // If an object was provided, add that to the scene as well
+    if (obj) {
+      this.remove(obj);
     }
   }
 
