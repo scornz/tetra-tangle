@@ -118,6 +118,51 @@ export class Board extends GameEntity {
     }
     // Remove this tetromino from the scene
     tetromino.destroy();
+    this.checkLines();
+  }
+
+  /**
+   * Check if any lines have been completed, and if so, remove them and shift the
+   * blocks above them appropriately.
+   */
+  checkLines(): void {
+    for (let y = 0; y < this.layout.length; y++) {
+      let filled = true;
+      // If any of the cells in this line are empty, then this line is not filled
+      for (let x = 0; x < this.layout[y].length; x++) {
+        if (this.layout[y][x] == 0) {
+          filled = false;
+          break;
+        }
+      }
+
+      if (!filled) continue;
+
+      // Remove this line from layout and cells
+      this.layout.splice(y, 1);
+      const cells = this.layoutCells.splice(y, 1)[0];
+      // Make sure to destroy all of the cells
+      for (const cell of cells) {
+        cell.destroy();
+      }
+
+      // Get all of the cells ABOVE this line and shift them down by 1
+      // NOTE: We start at y because we just deleted it
+      for (let dy = y; dy < this.layout.length; dy++) {
+        for (let x = 0; x < this.layout[dy].length; x++) {
+          if (this.layout[dy][x] == 0) continue;
+
+          const cell = this.layoutCells[dy][x];
+          cell.obj.position.y -= 1;
+        }
+      }
+
+      // Replace new line of zeroes and null values along the top
+      this.layout.push(Array(this.width).fill(0));
+      this.layoutCells.push(Array(this.width).fill(null));
+      // Check this line again since everything just shifted down
+      y--;
+    }
   }
 
   /**
