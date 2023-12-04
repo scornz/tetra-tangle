@@ -13,8 +13,8 @@ import { Tetromino, TetrominoType } from "game/objects/Tetromino";
  * An example layout of some possible tetrominos
  */
 const TESTING_LAYOUT: number[][] = [
-  [8, 8, 0, 0, 0, 0, 0, 0, 8, 8],
-  [8, 0, 0, 0, 0, 0, 0, 0, 0, 8],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -34,7 +34,7 @@ const TESTING_LAYOUT: number[][] = [
   [0, 1, 0, 7, 6, 6, 6, 7, 7, 1],
   [0, 1, 7, 7, 3, 6, 6, 7, 2, 2],
   [0, 1, 7, 3, 3, 3, 6, 4, 2, 2],
-  [8, 1, 0, 1, 1, 1, 1, 4, 4, 4],
+  [0, 1, 0, 1, 1, 1, 1, 4, 4, 4],
 ].reverse();
 
 const COLORS: { [id: string]: THREE.ColorRepresentation } = {
