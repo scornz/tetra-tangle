@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Cell } from "game/objects";
+import { Cell, GhostTetromino } from "game/objects";
 import { Board } from "game/containers";
 import {
   I_WALL_KICKS,
@@ -47,6 +47,9 @@ export class Tetromino extends GameEntity {
   public readonly cells: Cell[] = new Array<Cell>();
   // The location of this tetromino on the board
   private pos: THREE.Vector2 = new THREE.Vector2(0, 0);
+  // The ghost representation of this tetromino
+  private ghost: GhostTetromino;
+
   // Reference to the game that this tetromino is a part of
   private game: Game;
   // Reference to engine's input handler
@@ -88,6 +91,8 @@ export class Tetromino extends GameEntity {
     this.game = board.game;
     // Event listener for input
     this.input = scene.engine.input;
+
+    this.ghost = new GhostTetromino(scene, board, type);
 
     // Create cells that make up this tetromino
     const shape = TETRIMINO_SHAPES[type][this.rot];
@@ -230,6 +235,8 @@ export class Tetromino extends GameEntity {
       // Get the position of the cell in world space, and set the position of the cell
       cell.obj.position.copy(this.board.boardToWorld(pos.x, pos.y));
     }
+
+    this.ghost.updateCellPositions(positions);
   }
 
   /**
@@ -344,5 +351,7 @@ export class Tetromino extends GameEntity {
     super.destroy();
     // Remove event listeners
     this.scene.engine.input.removeListener(this.handleInputCallback);
+    // Destroy the ghost
+    this.ghost.destroy();
   }
 }
