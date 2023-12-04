@@ -12,7 +12,7 @@ export class Scene extends THREE.Scene implements Entity {
   resources: Resource[] = [];
 
   // Keep a reference to the engine
-  constructor(protected engine: Engine) {
+  constructor(public readonly engine: Engine) {
     super();
   }
 
