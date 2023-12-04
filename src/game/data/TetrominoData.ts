@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { TetrominoType } from "game/objects/Tetromino";
 
 /*
@@ -6,6 +7,13 @@ import { TetrominoType } from "game/objects/Tetromino";
  */
 type TetriminoShapeData = {
   [key: number]: number[][];
+};
+
+/*
+ * Information about the offset of a tetromino used when rotating.
+ */
+type TetriminoOffsetData = {
+  [key: number]: THREE.Vector2[];
 };
 
 /**
@@ -203,5 +211,149 @@ export const TETRIMINO_SHAPES: { [id in TetrominoType]: TetriminoShapeData } = {
       [0, 0, 0],
       [8, 0, 8],
     ].reverse(),
+  },
+};
+
+/**
+ * When rotating a J, L, T, S, or Z tetromino, the tetromino may not be able to rotate
+ * completely within the constraints of the board. These are sequential offsets
+ * to attempt to move the tetromino to a valid position according to the SRS.
+ */
+export const JLTSZ_WALL_KICKS: { [id: number]: TetriminoOffsetData } = {
+  0: {
+    1: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(-1, 0),
+      new THREE.Vector2(-1, 1),
+      new THREE.Vector2(0, -2),
+      new THREE.Vector2(-1, -2),
+    ],
+    3: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(1, 0),
+      new THREE.Vector2(1, 1),
+      new THREE.Vector2(0, -2),
+      new THREE.Vector2(1, -2),
+    ],
+  },
+  1: {
+    0: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(1, 0),
+      new THREE.Vector2(1, -1),
+      new THREE.Vector2(0, 2),
+      new THREE.Vector2(1, 2),
+    ],
+    2: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(1, 0),
+      new THREE.Vector2(1, -1),
+      new THREE.Vector2(0, 2),
+      new THREE.Vector2(1, 2),
+    ],
+  },
+  2: {
+    1: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(-1, 0),
+      new THREE.Vector2(-1, 1),
+      new THREE.Vector2(0, -2),
+      new THREE.Vector2(-1, -2),
+    ],
+    3: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(1, 0),
+      new THREE.Vector2(1, 1),
+      new THREE.Vector2(0, -2),
+      new THREE.Vector2(1, -2),
+    ],
+  },
+  3: {
+    0: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(-1, 0),
+      new THREE.Vector2(-1, -1),
+      new THREE.Vector2(0, 2),
+      new THREE.Vector2(-1, 2),
+    ],
+    2: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(-1, 0),
+      new THREE.Vector2(-1, -1),
+      new THREE.Vector2(0, 2),
+      new THREE.Vector2(-1, 2),
+    ],
+  },
+};
+
+/**
+ * When rotating an I tetromino, the tetromino may not be able to rotate completely,
+ * due to the length of the tetromino. These are sequential offsets to attempt to
+ * move the tetromino to a valid position according to the SRS.
+ */
+export const I_WALL_KICKS: { [id: number]: TetriminoOffsetData } = {
+  0: {
+    1: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(-2, 0),
+      new THREE.Vector2(1, 0),
+      new THREE.Vector2(-2, -1),
+      new THREE.Vector2(1, 2),
+    ],
+    3: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(-1, 0),
+      new THREE.Vector2(2, 0),
+      new THREE.Vector2(-1, 2),
+      new THREE.Vector2(2, -1),
+    ],
+  },
+  1: {
+    0: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(2, 0),
+      new THREE.Vector2(-1, 0),
+      new THREE.Vector2(2, 1),
+      new THREE.Vector2(-1, -2),
+    ],
+    2: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(-1, 0),
+      new THREE.Vector2(2, 0),
+      new THREE.Vector2(-1, 2),
+      new THREE.Vector2(2, -1),
+    ],
+  },
+  2: {
+    1: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(1, 0),
+      new THREE.Vector2(-2, 0),
+      new THREE.Vector2(1, -2),
+      new THREE.Vector2(-2, 1),
+    ],
+    3: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(2, 0),
+      new THREE.Vector2(-1, 0),
+      new THREE.Vector2(2, 1),
+      new THREE.Vector2(-1, -2),
+    ],
+  },
+  3: {
+    0: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(1, 0),
+      new THREE.Vector2(-2, 0),
+      new THREE.Vector2(1, -2),
+      new THREE.Vector2(-2, 1),
+    ],
+    2: [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(-2, 0),
+      new THREE.Vector2(1, 0),
+      new THREE.Vector2(-2, -1),
+      new THREE.Vector2(1, 2),
+    ],
   },
 };
