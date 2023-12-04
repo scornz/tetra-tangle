@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GameEntity } from "engine/GameEntity";
-import { Board } from "game/Board";
+import { Board } from "game/containers/Board";
 import { Cell } from "game/objects/Cell";
 import { Scene } from "engine/Scene";
 import {
@@ -8,7 +8,8 @@ import {
   JLTSZ_WALL_KICKS,
   TETRIMINO_SHAPES,
 } from "game/data/TetrominoData";
-import { ALL_CONTROLS } from "game/data/Controls";
+import { ALL_CONTROLS, MOVEMENT } from "game/data/Controls";
+import { Game } from "game/Game";
 
 /**
  * The 7 tetromino types (plus an 8th debuggable)
@@ -47,6 +48,8 @@ export class Tetromino extends GameEntity {
   private cells: Cell[] = new Array<Cell>();
   // The location of this tetromino on the board
   private pos: THREE.Vector2 = new THREE.Vector2(0, 0);
+  // Reference to the game that this tetromino is a part of
+  private game: Game;
 
   /* The rotation of this tetromino
   0 - normal
@@ -56,12 +59,19 @@ export class Tetromino extends GameEntity {
   */
   private rot: number = 0;
 
-  private moveTime: number = 0;
+  private dropTime: number = 0;
+  private lockDownTime: number = 0;
+
+  // Move counters used for lock down timer
+  private moveCounter: number = 0;
+  private prevMoveCounter: number = 0;
 
   constructor(scene: Scene, private board: Board, private type: TetrominoType) {
     super(scene);
     // Spawn the tetromino at the top middle of the board
     this.pos.set(3, 19);
+    // Get the current game from the board
+    this.game = board.game;
 
     // Create cells that make up this tetromino
     const shape = TETRIMINO_SHAPES[type][this.rot];
@@ -117,6 +127,7 @@ export class Tetromino extends GameEntity {
 
     // Set the new position
     this.pos.copy(newPos);
+    this.moveCounter++;
   }
 
   /**
@@ -145,6 +156,7 @@ export class Tetromino extends GameEntity {
       // No collision!
       this.rot = rot;
       this.pos.copy(newPos);
+      this.moveCounter++;
       break;
     }
 
@@ -213,12 +225,50 @@ export class Tetromino extends GameEntity {
     return positions;
   }
 
+  /**
+   * Check if the board has blocks immediatley below any of these cells. If so,
+   * this should engage a lock down of the tetromino.
+   */
+  checkLockDown(): boolean {
+    const positions = this.getBoardPositions(this.pos, this.rot);
+    for (const pos of positions) {
+      // Check to see if the position BELOW this cell is filled
+      if (this.board.isFilled(pos.x, pos.y - 1)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   update(delta: number): void {
     // Handle falling of tetromino
-    this.moveTime += delta;
-    if (this.moveTime > 1) {
-      this.moveTime = 0;
+    this.dropTime += delta;
+    if (this.dropTime > this.game.speed) {
+      this.dropTime = 0;
+      // Move this tetromino down
       this.move(0, -1);
+    }
+
+    if (this.checkLockDown()) {
+      // Reset the counter if the tetromino has been moved and is less than max moves
+      if (
+        this.moveCounter != this.prevMoveCounter &&
+        this.moveCounter <= MOVEMENT.MAX_MOVE_LOCK_DOWN
+      ) {
+        this.prevMoveCounter = this.moveCounter;
+        this.lockDownTime = 0;
+      }
+
+      this.lockDownTime += delta;
+      if (this.lockDownTime > 0.5) {
+        // Lock down the tetromino
+        console.log("Locking down tetromino");
+      }
+    } else {
+      // Reset move counters
+      this.moveCounter = 0;
+      this.prevMoveCounter = 0;
     }
 
     this.updateCellPositions();

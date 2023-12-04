@@ -1,11 +1,12 @@
 import * as THREE from "three";
 import vertexShader from "./shader.vert";
 import fragmentShader from "./shader.frag";
-import { Cell } from "./objects/Cell";
+import { Cell } from "game/objects/Cell";
 import { Engine } from "engine/Engine";
 import { Entity } from "engine/Entity";
 import { Scene } from "engine/Scene";
 import { GameEntity } from "engine/GameEntity";
+import { Game } from "game/Game";
 
 /**
  * An example layout of some possible tetrominos
@@ -62,8 +63,9 @@ export class Board extends GameEntity {
 
   constructor(
     protected scene: Scene,
-    public width: number = 10,
-    public height: number = 22,
+    public readonly game: Game,
+    public readonly width: number = 10,
+    public readonly height: number = 22,
     private pos: THREE.Vector3 = new THREE.Vector3(),
     testing: boolean = false
   ) {
