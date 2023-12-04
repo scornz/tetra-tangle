@@ -68,6 +68,11 @@ export class Tetromino extends GameEntity {
   private moveCounter: number = 0;
   private prevMoveCounter: number = 0;
 
+  private _placed: boolean = false;
+  get placed(): boolean {
+    return this._placed;
+  }
+
   // Callback for handling movement, store this for later removal
   private handleInputCallback: (input: InputType) => void;
 
@@ -274,6 +279,8 @@ export class Tetromino extends GameEntity {
     this.updateCellPositions();
     // Place the tetromino on the board
     this.board.place(this);
+    // Note that this piece has been placed
+    this._placed = true;
   }
 
   update(delta: number): void {

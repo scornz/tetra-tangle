@@ -219,38 +219,38 @@ export const TETRIMINO_SHAPES: { [id in TetrominoType]: TetriminoShapeData } = {
  * the next tetromino to spawn in the preview selection.
  */
 export const TETRIMINO_PREVIEW_SHAPES: { [id in TetrominoType]: number[][] } = {
-  [TetrominoType.I]: [
+  1: [
     [0, 0, 0, 0],
     [1, 1, 1, 1],
-  ],
-  [TetrominoType.O]: [
+  ].reverse(),
+  2: [
     [0, 2, 2, 0],
     [0, 2, 2, 0],
-  ],
-  [TetrominoType.T]: [
+  ].reverse(),
+  3: [
     [0, 3, 0, 0],
     [3, 3, 3, 0],
-  ],
-  [TetrominoType.J]: [
+  ].reverse(),
+  4: [
     [4, 0, 0, 0],
     [4, 4, 4, 0],
-  ],
-  [TetrominoType.L]: [
+  ].reverse(),
+  5: [
     [0, 0, 5, 0],
     [5, 5, 5, 0],
-  ],
-  [TetrominoType.S]: [
+  ].reverse(),
+  6: [
     [0, 6, 6, 0],
     [6, 6, 0, 0],
-  ],
-  [TetrominoType.Z]: [
+  ].reverse(),
+  7: [
     [7, 7, 0, 0],
     [0, 7, 7, 0],
-  ],
-  [TetrominoType.X]: [
+  ].reverse(),
+  8: [
     [8, 0, 0, 8],
     [0, 0, 0, 8],
-  ],
+  ].reverse(),
 };
 
 /**
