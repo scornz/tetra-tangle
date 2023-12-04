@@ -4,5 +4,5 @@ import { MainScene } from "game/scenes/MainScene";
 
 new Engine({
   canvas: document.querySelector("#canvas") as HTMLCanvasElement,
-  experience: MainScene,
+  startScene: MainScene,
 });

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { Entity } from "engine/Entity";
-import { Engine } from "engine/Engine";
+import { Scene } from "./Scene";
 
 /**
  * An entity that needs a reference to the engine. Instatiating this will
@@ -10,7 +10,7 @@ import { Engine } from "engine/Engine";
 export class GameEntity implements Entity {
   public obj!: THREE.Object3D;
 
-  constructor(protected engine: Engine, obj?: THREE.Object3D) {
+  constructor(protected scene: Scene, obj?: THREE.Object3D) {
     // If no object was provided, simply create an empty object and that to the scene
     if (!obj) {
       this.obj = new THREE.Object3D();
@@ -19,7 +19,7 @@ export class GameEntity implements Entity {
     }
 
     // Add this object to the scene
-    engine.scene.add(this.obj);
+    scene.addEntity(this, this.obj);
   }
 
   update(_delta: number): void {}

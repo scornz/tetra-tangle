@@ -1,4 +1,3 @@
-import * as THREE from "three";
 import { RenderEngine } from "./RenderEngine";
 import { RenderLoop } from "./RenderLoop";
 import { DebugUI } from "./interface/DebugUI";
@@ -6,14 +5,13 @@ import { Sizes } from "./Sizes";
 import { Camera } from "./Camera";
 import { Resources } from "./Resources";
 import { InfoConfig, InfoUI } from "./interface/InfoUI";
-import { Experience, ExperienceConstructor } from "./Experience";
 import { Loader } from "./interface/Loader";
 import { Raycaster } from "./Raycaster";
-import { Entity } from "./Entity";
+import { Scene } from "./Scene";
 
 export class Engine {
   public readonly camera!: Camera;
-  public readonly scene!: THREE.Scene;
+  private scene!: Scene;
   public readonly renderEngine!: RenderEngine;
   public readonly time!: RenderLoop;
   public readonly debug!: DebugUI;
@@ -22,16 +20,15 @@ export class Engine {
   public readonly sizes!: Sizes;
   public readonly canvas!: HTMLCanvasElement;
   public readonly resources!: Resources;
-  public readonly experience!: Experience;
   private readonly loader!: Loader;
 
   constructor({
     canvas,
-    experience,
+    startScene,
     info,
   }: {
     canvas: HTMLCanvasElement;
-    experience: ExperienceConstructor;
+    startScene: typeof Scene;
     info?: InfoConfig;
   }) {
     if (!canvas) {
@@ -45,17 +42,16 @@ export class Engine {
     this.sizes = new Sizes(this);
     this.debug = new DebugUI();
     this.time = new RenderLoop(this);
-    this.scene = new THREE.Scene();
+    this.scene = new startScene(this);
     this.camera = new Camera(this);
     this.raycaster = new Raycaster(this);
     this.infoUI = new InfoUI(info);
     this.renderEngine = new RenderEngine(this);
-    this.experience = new experience(this);
-    this.resources = new Resources(this.experience.resources);
+    this.resources = new Resources(this.scene.resources);
     this.loader = new Loader();
 
     this.resources.on("loaded", () => {
-      this.experience.init();
+      this.scene.init();
       this.loader.complete();
     });
 
@@ -64,20 +60,32 @@ export class Engine {
     });
   }
 
+  /**
+   * Change the active scene
+   */
+  setScene(scene: Scene) {
+    this.scene = scene;
+  }
+
+  /**
+    Returns the active scene.
+   */
+  activeScene() {
+    return this.scene;
+  }
+
   update(delta: number) {
     if (!this.loader.isComplete) return;
 
     this.camera.update();
     this.renderEngine.update();
-    this.experience.update(delta);
+    this.scene.update(delta);
     this.debug.update();
   }
 
   resize() {
     this.camera.resize();
     this.renderEngine.resize();
-    if (this.experience.resize) {
-      this.experience.resize();
-    }
+    this.scene.resize();
   }
 }

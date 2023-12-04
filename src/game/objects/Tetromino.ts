@@ -3,6 +3,7 @@ import { GameEntity } from "engine/GameEntity";
 import { Engine } from "engine/Engine";
 import { Board } from "game/Board";
 import { Cell } from "game/objects/Cell";
+import { Scene } from "engine/Scene";
 
 /**
  * The 7 tetromino types (plus an 8th debuggable)
@@ -92,13 +93,9 @@ export class Tetromino extends GameEntity {
 
   private moveTime: number = 0;
 
-  constructor(
-    engine: Engine,
-    private board: Board,
-    private type: TetrominoType
-  ) {
+  constructor(scene: Scene, private board: Board, private type: TetrominoType) {
     //
-    super(engine);
+    super(scene);
     // Spawn the tetromino at the top middle of the board
     this.pos.set(0, 21);
 
@@ -109,7 +106,7 @@ export class Tetromino extends GameEntity {
     for (let r = 0; r < shape.length; r++) {
       for (let c = 0; c < shape[r].length; c++) {
         if (shape[r][c] != 0) {
-          const cell = new Cell(engine, TETROMINO_COLORS[type]);
+          const cell = new Cell(scene, TETROMINO_COLORS[type]);
           this.cells.push(cell);
         }
       }
@@ -158,5 +155,7 @@ export class Tetromino extends GameEntity {
       this.moveTime = 0;
       this.pos.y--;
     }
+
+    this.updateCellPositions();
   }
 }

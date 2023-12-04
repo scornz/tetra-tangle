@@ -4,6 +4,8 @@ import fragmentShader from "./shader.frag";
 import { Cell } from "./objects/Cell";
 import { Engine } from "engine/Engine";
 import { Entity } from "engine/Entity";
+import { Scene } from "engine/Scene";
+import { GameEntity } from "engine/GameEntity";
 
 /**
  * An example layout of some possible tetrominos
@@ -48,7 +50,7 @@ const COLORS: { [id: string]: THREE.ColorRepresentation } = {
 /**
  * A game board, filled with placed tetraminos.
  */
-export class Board implements Entity {
+export class Board extends GameEntity {
   /**
    * Layout of the overall board
    * 0 represents an empty square
@@ -59,12 +61,13 @@ export class Board implements Entity {
   private layout: number[][];
 
   constructor(
-    private engine: Engine,
+    protected scene: Scene,
     public width: number = 10,
     public height: number = 22,
     private pos: THREE.Vector3 = new THREE.Vector3(),
     testing: boolean = false
   ) {
+    super(scene);
     // 22 rows, by 10 columns
     this.layout = !testing
       ? Array.from(Array(height), (_) => Array(width).fill(0))
@@ -79,7 +82,7 @@ export class Board implements Entity {
         // Skip if this box is supposed to be empty
         if (val == 0) continue;
 
-        const cell = new Cell(this.engine, COLORS[val]);
+        const cell = new Cell(this.scene, COLORS[val]);
         cell.obj.position.set(x, y, 0).add(this.pos);
       }
     }
