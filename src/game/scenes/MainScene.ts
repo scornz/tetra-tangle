@@ -11,11 +11,12 @@ export class MainScene extends Scene {
 
   init() {
     const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(10, 10),
+      new THREE.PlaneGeometry(20, 10),
       new THREE.MeshStandardMaterial({ color: 0xffffff })
     );
 
     plane.rotation.x = -Math.PI / 2;
+    plane.position.y = -0.5;
     plane.receiveShadow = true;
 
     this.add(plane);
