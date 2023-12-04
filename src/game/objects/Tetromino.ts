@@ -1,16 +1,14 @@
 import * as THREE from "three";
-import { GameEntity } from "engine/GameEntity";
-import { Board } from "game/containers/Board";
-import { Cell } from "game/objects/Cell";
-import { Scene } from "engine/Scene";
+import { Cell } from "game/objects";
+import { Board } from "game/containers";
 import {
   I_WALL_KICKS,
   JLTSZ_WALL_KICKS,
   TETRIMINO_SHAPES,
-} from "game/data/TetrominoData";
-import { ALL_CONTROLS, MOVEMENT } from "game/data/Controls";
-import { Game } from "game/Game";
-import { InputType } from "engine/Input";
+  MOVEMENT,
+} from "game/data";
+import { Game } from "game";
+import { GameEntity, Input, InputType, Scene } from "engine";
 
 /**
  * The 7 tetromino types (plus an 8th debuggable)
@@ -51,6 +49,8 @@ export class Tetromino extends GameEntity {
   private pos: THREE.Vector2 = new THREE.Vector2(0, 0);
   // Reference to the game that this tetromino is a part of
   private game: Game;
+  // Reference to engine's input handler
+  private input: Input;
 
   /* The rotation of this tetromino
   0 - normal
@@ -81,6 +81,8 @@ export class Tetromino extends GameEntity {
     this.pos.set(3, 19);
     // Get the current game from the board
     this.game = board.game;
+    // Event listener for input
+    this.input = scene.engine.input;
 
     // Create cells that make up this tetromino
     const shape = TETRIMINO_SHAPES[type][this.rot];
@@ -275,9 +277,12 @@ export class Tetromino extends GameEntity {
   }
 
   update(delta: number): void {
-    // Handle falling of tetromino
     this.dropTime += delta;
-    if (this.dropTime > this.game.speed) {
+    // Handle falling of tetromino, use soft drop speed if soft drop key is held
+    if (
+      this.dropTime > this.game.speed ||
+      (this.dropTime > MOVEMENT.SD && this.input.keyHeld == InputType.SOFT_DROP)
+    ) {
       this.dropTime = 0;
       // Move this tetromino down
       this.move(0, -1);

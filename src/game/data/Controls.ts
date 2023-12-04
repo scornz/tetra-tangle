@@ -16,24 +16,10 @@ export const MOVEMENT = {
    * Soft drop speed. The time in milliseconds between each soft drop movement.
    * Only applies when tetromino speed is slower than this.
    */
-  SD: 100 / 1000,
+  SD: 30 / 1000,
   /**
    * The maximum number of times a tetromino can be moved down before the lock
    * down timer stops resetting
    */
   MAX_MOVE_LOCK_DOWN: 15,
-};
-
-/**
- * A list of all controls used in the game.
- */
-export const ALL_CONTROLS = {
-  moveLeft: "ArrowLeft",
-  moveRight: "ArrowRight",
-  rotateRight: "ArrowUp",
-  rotateLeft: "KeyZ",
-  rotate180: "KeyX",
-  hold: "KeyC",
-  softDrop: "ArrowDown",
-  hardDrop: "Space",
 };
