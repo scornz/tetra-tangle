@@ -294,10 +294,13 @@ export class Tetromino extends GameEntity {
 
   update(delta: number): void {
     this.dropTime += delta;
+
+    const [keyHeld, keyHeldTime] = this.input.getHeldKey();
+
     // Handle falling of tetromino, use soft drop speed if soft drop key is held
     if (
       this.dropTime > this.game.speed ||
-      (this.dropTime > MOVEMENT.SD && this.input.keyHeld == InputType.SOFT_DROP)
+      (this.dropTime > MOVEMENT.SD && keyHeld == InputType.SOFT_DROP)
     ) {
       this.dropTime = 0;
       // Move this tetromino down
@@ -306,16 +309,12 @@ export class Tetromino extends GameEntity {
 
     // If the held key is movement to the right or left
     if (
-      (this.scene.engine.input.keyHeld == InputType.MOVE_LEFT ||
-        this.scene.engine.input.keyHeld == InputType.MOVE_RIGHT) &&
-      this.scene.engine.input.keyHeldTime > MOVEMENT.DAS
+      (keyHeld == InputType.MOVE_LEFT || keyHeld == InputType.MOVE_RIGHT) &&
+      keyHeldTime > MOVEMENT.DAS
     ) {
       if (this.arrTime >= MOVEMENT.ARR) {
         // Move the tetromino
-        this.move(
-          this.scene.engine.input.keyHeld == InputType.MOVE_LEFT ? -1 : 1,
-          0
-        );
+        this.move(keyHeld == InputType.MOVE_LEFT ? -1 : 1, 0);
         this.arrTime = 0;
       }
       this.arrTime += delta;

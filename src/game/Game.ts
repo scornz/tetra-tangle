@@ -41,7 +41,7 @@ export class Game extends GameEntity {
       scene,
       this,
       this.numPreview,
-      new THREE.Vector3(8, 20, 0)
+      new THREE.Vector3(8, 18, 0)
     );
 
     for (let i = 0; i < this.numPreview; i++) {

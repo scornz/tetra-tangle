@@ -29,16 +29,8 @@ export const INPUT_MAP: { [key: string]: InputType } = {
 };
 
 export class Input {
-  // The current key being held down
-  private _keyHeld: InputType | null = null;
-  get keyHeld() {
-    return this._keyHeld;
-  }
-  // The amount of time the current key has been held down
-  private _keyHeldTime: number = 0;
-  get keyHeldTime() {
-    return this._keyHeldTime;
-  }
+  // The current keys being held down
+  private keysHeld: Map<InputType, number> = new Map<InputType, number>();
   // All listeners on input
   private listeners: Set<(input: InputType) => void> = new Set<() => void>();
 
@@ -60,10 +52,9 @@ export class Input {
       listener(input);
     }
 
-    // Update the held down key if there isn't anything right now
-    if (this.keyHeld == null) {
-      this._keyHeldTime = 0;
-      this._keyHeld = input;
+    // Add the key to the map if it's not already there
+    if (!this.keysHeld.has(input)) {
+      this.keysHeld.set(input, 0);
     }
   }
 
@@ -74,11 +65,8 @@ export class Input {
     const input = INPUT_MAP[key];
     if (input === undefined) return;
 
-    // If we released the held key, change it
-    if (this.keyHeld == input) {
-      this._keyHeld = null;
-      this._keyHeldTime = 0;
-    }
+    // Remove the key from the map
+    this.keysHeld.delete(input);
   }
 
   /**
@@ -101,12 +89,24 @@ export class Input {
     this.listeners.delete(callback);
   }
 
+  getHeldKey(): [InputType | null, number] {
+    let longestHeldKey: InputType | null = null;
+    let longestHeldTime: number = 0;
+
+    this.keysHeld.forEach((value, key) => {
+      if (value > longestHeldTime) {
+        longestHeldKey = key;
+        longestHeldTime = value;
+      }
+    });
+
+    return [longestHeldKey, longestHeldTime];
+  }
+
   update(deltaTime: number) {
     // Increase held time if there is a key being held
-    if (this.keyHeld != null) {
-      this._keyHeldTime += deltaTime;
-    } else {
-      this._keyHeldTime = 0;
-    }
+    this.keysHeld.forEach((value, key) => {
+      this.keysHeld.set(key, value + deltaTime);
+    });
   }
 }

@@ -68,11 +68,6 @@ export class Preview extends GameEntity {
     this.pieces[this.numPreview - 1] = cells;
   }
 
-  /**
-   * Show the pieces in the preview.
-   */
-  display() {}
-
   update(delta: number): void {
     // throw new Error("Method not implemented.");
   }
