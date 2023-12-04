@@ -215,6 +215,45 @@ export const TETRIMINO_SHAPES: { [id in TetrominoType]: TetriminoShapeData } = {
 };
 
 /**
+ * 2x4 matrix for each tetromino type available. These will be used to display
+ * the next tetromino to spawn in the preview selection.
+ */
+export const TETRIMINO_PREVIEW_SHAPES: { [id in TetrominoType]: number[][] } = {
+  [TetrominoType.I]: [
+    [0, 0, 0, 0],
+    [1, 1, 1, 1],
+  ],
+  [TetrominoType.O]: [
+    [0, 2, 2, 0],
+    [0, 2, 2, 0],
+  ],
+  [TetrominoType.T]: [
+    [0, 3, 0, 0],
+    [3, 3, 3, 0],
+  ],
+  [TetrominoType.J]: [
+    [4, 0, 0, 0],
+    [4, 4, 4, 0],
+  ],
+  [TetrominoType.L]: [
+    [0, 0, 5, 0],
+    [5, 5, 5, 0],
+  ],
+  [TetrominoType.S]: [
+    [0, 6, 6, 0],
+    [6, 6, 0, 0],
+  ],
+  [TetrominoType.Z]: [
+    [7, 7, 0, 0],
+    [0, 7, 7, 0],
+  ],
+  [TetrominoType.X]: [
+    [8, 0, 0, 8],
+    [0, 0, 0, 8],
+  ],
+};
+
+/**
  * When rotating a J, L, T, S, or Z tetromino, the tetromino may not be able to rotate
  * completely within the constraints of the board. These are sequential offsets
  * to attempt to move the tetromino to a valid position according to the SRS.
