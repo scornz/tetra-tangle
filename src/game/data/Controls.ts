@@ -11,7 +11,7 @@ export const MOVEMENT = {
    * Auto repeat rate. The time in milliseconds between each shift movement when
    * auto repeat is engage.
    */
-  ARR: 20 / 1000,
+  ARR: 10 / 1000,
   /**
    * Soft drop speed. The time in milliseconds between each soft drop movement.
    * Only applies when tetromino speed is slower than this.
