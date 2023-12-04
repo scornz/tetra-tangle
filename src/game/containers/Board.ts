@@ -26,6 +26,14 @@ const TESTING_LAYOUT: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 2, 2, 0, 0, 0],
   [0, 0, 0, 0, 0, 2, 2, 5, 0, 0],
   [0, 0, 0, 0, 0, 5, 5, 5, 0, 1],
@@ -71,7 +79,7 @@ export class Board extends GameEntity {
     protected scene: Scene,
     public readonly game: Game,
     public readonly width: number = 10,
-    public readonly height: number = 22,
+    public readonly height: number = 30,
     private pos: THREE.Vector3 = new THREE.Vector3(),
     testing: boolean = false
   ) {
@@ -176,7 +184,7 @@ export class Board extends GameEntity {
    * Returns true if the given position has a cell (a non-zero value in it).
    */
   isFilled(x: number, y: number): boolean {
-    if (x < 0 || x >= this.width || y < 0 || y >= this.height) return true;
+    if (x < 0 || x >= this.width || y < 0) return true;
 
     return this.layout[y][x] != 0;
   }
