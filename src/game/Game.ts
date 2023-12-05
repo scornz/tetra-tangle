@@ -5,6 +5,7 @@ import { Tetromino, TetrominoType } from "./objects";
 import { shuffle } from "utils";
 import { setRecoil } from "recoil-nexus";
 import { scoreAtom } from "state/game";
+import { SCORE_VALUES, ScoreType } from "./data";
 
 /**
  * Manages a game of Tetris, including the board, spawning tetrominos, and
@@ -12,6 +13,8 @@ import { scoreAtom } from "state/game";
 export class Game extends GameEntity {
   // The current speed that a tetromino is falling at
   speed: number = 1;
+  level: number = 1;
+
   numPreview: number = 5;
 
   public readonly board!: Board;
@@ -87,8 +90,24 @@ export class Game extends GameEntity {
     }
   }
 
-  addScore(amount: number) {
-    this.score += amount;
+  /**
+   * Add a score to the current score, and update the recoil atom
+   * @param scoreType The type of score that this is (changes how the amount is calculated)
+   * @param val An additional value to add to the score (usually the number of cells dropped)
+   */
+  addScore(scoreType: ScoreType, val: number = 0) {
+    // TODO: Implement combo and back-to-back
+    console.log("Scored: ", scoreType);
+
+    // val in this case is the number of cells dropped
+    if (scoreType == ScoreType.SOFT_DROP || scoreType == ScoreType.HARD_DROP) {
+      this.score += val * SCORE_VALUES[scoreType];
+    }
+    // val does not matter, so we just multiply by the score value
+    else {
+      this.score += SCORE_VALUES[scoreType] * this.level;
+    }
+    // Update atom
     setRecoil(scoreAtom, this.score);
   }
 

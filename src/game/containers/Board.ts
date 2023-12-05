@@ -7,7 +7,12 @@ import { Entity } from "engine/Entity";
 import { Scene } from "engine/Scene";
 import { GameEntity } from "engine/GameEntity";
 import { Game } from "game/Game";
-import { Tetromino, TetrominoType } from "game/objects/Tetromino";
+import {
+  Tetromino,
+  TetrominoClearType,
+  TetrominoType,
+} from "game/objects/Tetromino";
+import { ScoreType } from "game/data";
 
 /**
  * An example layout of some possible tetrominos
@@ -126,14 +131,20 @@ export class Board extends GameEntity {
     }
     // Remove this tetromino from the scene
     tetromino.destroy();
-    this.checkLines();
+
+    // Check clear type before removing any lines
+    const clearType = tetromino.checkClearType();
+    // Check cleared lines, and whether or not this was a t-spin
+    const cleared = this.checkLines();
+    this.updateScore(cleared, clearType);
   }
 
   /**
    * Check if any lines have been completed, and if so, remove them and shift the
-   * blocks above them appropriately.
+   * blocks above them appropriately. Return number of lines cleared.
    */
-  checkLines(): void {
+  checkLines(): number {
+    let cleared = 0;
     for (let y = 0; y < this.layout.length; y++) {
       let filled = true;
       // If any of the cells in this line are empty, then this line is not filled
@@ -170,7 +181,52 @@ export class Board extends GameEntity {
       this.layoutCells.push(Array(this.width).fill(null));
       // Check this line again since everything just shifted down
       y--;
-      this.game.addScore(100);
+      cleared++;
+    }
+
+    return cleared;
+  }
+
+  /**
+   * Given number of lines cleared and the type of clear, update the score.
+   * @param cleared Number of lines cleared
+   * @param clearType Type of line clear that this would be (tspin, etc.)
+   */
+  updateScore(cleared: number, clearType: TetrominoClearType) {
+    switch (true) {
+      case clearType == TetrominoClearType.NORMAL && cleared == 1:
+        this.game.addScore(ScoreType.SINGLE);
+        break;
+      case clearType == TetrominoClearType.NORMAL && cleared == 2:
+        this.game.addScore(ScoreType.DOUBLE);
+        break;
+      case clearType == TetrominoClearType.NORMAL && cleared == 3:
+        this.game.addScore(ScoreType.TRIPLE);
+        break;
+      case clearType == TetrominoClearType.NORMAL && cleared == 4:
+        this.game.addScore(ScoreType.TETRIS);
+        break;
+      case clearType == TetrominoClearType.TSPIN && cleared == 0:
+        this.game.addScore(ScoreType.TSPIN_NONE);
+        break;
+      case clearType == TetrominoClearType.TSPIN && cleared == 1:
+        this.game.addScore(ScoreType.TSPIN_SINGLE);
+        break;
+      case clearType == TetrominoClearType.TSPIN && cleared == 2:
+        this.game.addScore(ScoreType.TSPIN_DOUBLE);
+        break;
+      case clearType == TetrominoClearType.TSPIN && cleared == 3:
+        this.game.addScore(ScoreType.TSPIN_TRIPLE);
+        break;
+      case clearType == TetrominoClearType.TSPIN_MINI && cleared == 0:
+        this.game.addScore(ScoreType.TSPIN_MINI_NONE);
+        break;
+      case clearType == TetrominoClearType.TSPIN_MINI && cleared == 1:
+        this.game.addScore(ScoreType.TSPIN_MINI_SINGLE);
+        break;
+      case clearType == TetrominoClearType.TSPIN_MINI && cleared == 2:
+        this.game.addScore(ScoreType.TSPIN_MINI_DOUBLE);
+        break;
     }
   }
 

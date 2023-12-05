@@ -39,6 +39,12 @@ export const TETROMINO_COLORS: {
   8: 0x924dbf,
 };
 
+export enum TetrominoClearType {
+  NORMAL,
+  TSPIN,
+  TSPIN_MINI,
+}
+
 /**
  * A falling tetromino in the game that is rotatable and placeable on the board.
  */
@@ -66,6 +72,9 @@ export class Tetromino extends GameEntity {
   private dropTime: number = 0;
   private lockDownTime: number = 0;
   private arrTime: number = MOVEMENT.ARR;
+
+  // Used for identifying t-spins
+  private lastMoveRotation: boolean = false;
 
   // Move counters used for lock down timer
   private moveCounter: number = 0;
@@ -157,6 +166,7 @@ export class Tetromino extends GameEntity {
     // Set the new position
     this.pos.copy(newPos);
     this.moveCounter++;
+    this.lastMoveRotation = false;
     return true;
   }
 
@@ -169,6 +179,7 @@ export class Tetromino extends GameEntity {
     // We can always "rotate" an O tetromino, it just doesn't really do anything
     if (this.type == TetrominoType.O) {
       this.moveCounter++;
+      this.lastMoveRotation = true;
       return true;
     }
 
@@ -189,6 +200,7 @@ export class Tetromino extends GameEntity {
       this.rot = rot;
       this.pos.copy(newPos);
       this.moveCounter++;
+      this.lastMoveRotation = true;
       return true;
     }
 
@@ -221,6 +233,50 @@ export class Tetromino extends GameEntity {
     }
 
     return false;
+  }
+
+  checkClearType(): TetrominoClearType {
+    // // Only T tetrominos can perform T-spins
+    if (this.type != TetrominoType.T) return TetrominoClearType.NORMAL;
+
+    // // Check if the last move was a rotation
+    if (!this.lastMoveRotation) return TetrominoClearType.NORMAL;
+
+    // Check if the three corners around this piece are filled
+    const corners = [
+      this.board.isFilled(this.pos.x, this.pos.y),
+      this.board.isFilled(this.pos.x, this.pos.y + 2),
+      this.board.isFilled(this.pos.x + 2, this.pos.y + 2),
+      this.board.isFilled(this.pos.x + 2, this.pos.y),
+    ];
+
+    const count = corners.filter(Boolean).length;
+
+    // Count must be greater than or equal to 3
+    if (count < 3) return TetrominoClearType.NORMAL;
+
+    let checkCorners = [0, 0];
+    // Check the two filled corners that the T piece is facing
+    switch (this.rot) {
+      case 0:
+        checkCorners = [1, 2];
+        break;
+      case 1:
+        checkCorners = [2, 3];
+        break;
+      case 2:
+        checkCorners = [0, 3];
+        break;
+      case 3:
+        checkCorners = [0, 1];
+        break;
+    }
+
+    /* If the T piece is facing TWO filled square, then it's a full tspin
+     otherwise it is a tspin mini */
+    return corners[checkCorners[0]] && corners[checkCorners[1]]
+      ? TetrominoClearType.TSPIN
+      : TetrominoClearType.TSPIN_MINI;
   }
 
   /**
@@ -336,6 +392,8 @@ export class Tetromino extends GameEntity {
       if (this.lockDownTime > 0.5) {
         // Lock down the tetromino
         this.place();
+        // Return early, no need to update the cell positions
+        return;
       }
     } else {
       // Reset move counters
