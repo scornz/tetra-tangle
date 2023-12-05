@@ -36,8 +36,8 @@ export class Input {
 
   constructor(engine: Engine) {
     // Process keyboard down and up events
-    engine.canvas.addEventListener("keydown", this.handleKeyDown.bind(this));
-    engine.canvas.addEventListener("keyup", this.handleKeyUp.bind(this));
+    window.addEventListener("keydown", this.handleKeyDown.bind(this));
+    window.addEventListener("keyup", this.handleKeyUp.bind(this));
   }
 
   private handleKeyDown(event: KeyboardEvent) {
