@@ -3,6 +3,8 @@ import { Scene, GameEntity, InputType } from "engine";
 import { Hold, Preview, Board } from "./containers";
 import { Tetromino, TetrominoType } from "./objects";
 import { shuffle } from "utils";
+import { setRecoil } from "recoil-nexus";
+import { scoreAtom } from "state/game";
 
 /**
  * Manages a game of Tetris, including the board, spawning tetrominos, and
@@ -23,6 +25,8 @@ export class Game extends GameEntity {
   private nextPieces: TetrominoType[] = [];
   private bag: TetrominoType[] = [];
 
+  private score: number = 0;
+
   // Whether or not the game is active
   active: boolean = true;
 
@@ -38,7 +42,7 @@ export class Game extends GameEntity {
       10,
       22,
       new THREE.Vector3(-4.5, 0, 0),
-      true
+      false
     );
     this.board.initialize();
 
@@ -81,6 +85,11 @@ export class Game extends GameEntity {
       // Prevent user from holding another piece until another one spawns
       this.alreadyHeld = true;
     }
+  }
+
+  addScore(amount: number) {
+    this.score += amount;
+    setRecoil(scoreAtom, this.score);
   }
 
   spawn() {

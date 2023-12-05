@@ -1,42 +1,48 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import { ChakraProvider, Stack, Text } from "@chakra-ui/react";
-import { RecoilRoot } from "recoil";
+import { ChakraProvider } from "@chakra-ui/react";
+import { RecoilRoot, useRecoilValue } from "recoil";
 import RecoilNexus from "recoil-nexus";
-import theme from "theme";
-import { Fonts } from "Fonts";
 
+// State
+import { AppState, appStateAtom } from "state/app";
+
+// Generic theming
+import { Fonts, theme } from "ui/style";
+
+// All screens
+import Home from "ui/screens/Home";
+import { Game } from "ui/screens";
+
+/**
+ * Base provider for app
+ */
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <RecoilRoot>
       <RecoilNexus />
       <Fonts />
       <ChakraProvider theme={theme}>
-        <Stack
-          h="100%"
-          spacing={2}
-          align="center"
-          justify="center"
-          direction="column"
-        >
-          <img src={reactLogo} alt="React Logo" />
-          <Text
-            fontSize="6xl"
-            fontWeight="400"
-            fontStyle="italic"
-            color="white"
-            fontFamily="testing"
-          >
-            Hello
-          </Text>
-          <p id="testing">Testing!</p>
-        </Stack>
+        <Router />
       </ChakraProvider>
     </RecoilRoot>
   );
+}
+
+/**
+ * Routes to different screens in the app based on the current state
+ */
+function Router() {
+  const state = useRecoilValue(appStateAtom);
+  // Switch screen based on current app state
+  const render = () => {
+    switch (state) {
+      case AppState.START:
+        return <Game />;
+      case AppState.PLAYING:
+        return <></>;
+    }
+  };
+
+  return render();
 }
 
 export default App;

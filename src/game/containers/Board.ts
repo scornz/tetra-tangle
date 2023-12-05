@@ -170,6 +170,7 @@ export class Board extends GameEntity {
       this.layoutCells.push(Array(this.width).fill(null));
       // Check this line again since everything just shifted down
       y--;
+      this.game.addScore(100);
     }
   }
 
