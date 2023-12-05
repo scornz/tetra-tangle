@@ -4,3 +4,4 @@
 
 export * from "./Controls";
 export * from "./TetrominoData";
+export * from "./Score";
