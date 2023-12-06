@@ -6,6 +6,7 @@ import { shuffle } from "utils";
 import { setRecoil } from "recoil-nexus";
 import { scoreAtom } from "state/game";
 import { SCORE_VALUES, ScoreType } from "./data";
+import { AppState, appStateAtom } from "state/app";
 
 /**
  * Manages a game of Tetris, including the board, spawning tetrominos, and
@@ -122,9 +123,17 @@ export class Game extends GameEntity {
     if (this.tetromino.checkCollision()) {
       // Immediatley destroy the tetromino, but leave the cells
       this.tetromino.destroy();
-      // GAME OVER condition
+      this.gameOver();
       this.active = false;
     }
+  }
+
+  /**
+   * The player has topped out, and the game is over.
+   */
+  gameOver() {
+    // Change app state to submit a score
+    setRecoil(appStateAtom, AppState.SUBMIT_SCORE);
   }
 
   /**

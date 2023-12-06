@@ -11,6 +11,7 @@ import { Fonts, theme } from "ui/style";
 // All screens
 import Home from "ui/screens/Home";
 import { Game } from "ui/screens";
+import SubmitScore from "ui/screens/SubmitScore";
 
 /**
  * Base provider for app
@@ -36,9 +37,13 @@ function Router() {
   const render = () => {
     switch (state) {
       case AppState.START:
-        return <Game />;
+        return <Home />;
       case AppState.PLAYING:
-        return <></>;
+        return <Game />;
+      case AppState.SUBMIT_SCORE:
+        return <SubmitScore />;
+      case AppState.LEADERBOARD:
+        return <div>Leaderboard</div>;
     }
   };
 
