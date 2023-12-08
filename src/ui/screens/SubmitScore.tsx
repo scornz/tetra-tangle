@@ -1,17 +1,20 @@
-import { Box, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Spinner, Stack, Text } from "@chakra-ui/react";
 import { Backdrop, EnterInput } from "ui/components";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { scoreAtom } from "state/game";
 import { submitScore } from "api/leaderboard";
 import { AppState, appStateAtom } from "state/app";
+import { useState } from "react";
 
 function SubmitScore() {
   const score = useRecoilValue(scoreAtom);
   const setAppState = useSetRecoilState(appStateAtom);
+  const [loading, setLoading] = useState(false);
 
   // Induce callback and clear input
   const uploadScore = async (text: string) => {
     const name = text.trim();
+    setLoading(true);
     // Submit the score
     await submitScore(name, score);
     console.log(`Score submitted under name [${name}] and value [${score}]`);
@@ -47,10 +50,24 @@ function SubmitScore() {
         >
           {score.toString().padStart(6, "0")}
         </Text>
-        <EnterInput
-          onEnter={uploadScore}
-          placeholder="Enter your name, then press enter..."
-        />
+        <Box height="100px" width="100%" display="flex" justifyContent="center">
+          {!loading ? (
+            <EnterInput
+              onEnter={uploadScore}
+              placeholder="Enter your name, then press enter..."
+            />
+          ) : (
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.600"
+              color="white"
+              size="xl"
+            />
+          )}
+        </Box>
+
+        <Button onClick={() => setAppState(AppState.LEADERBOARD)}>Skip</Button>
       </Stack>
     </Box>
   );

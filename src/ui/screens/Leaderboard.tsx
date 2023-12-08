@@ -1,4 +1,12 @@
-import { Box, Button, HStack, MenuIcon, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  HStack,
+  MenuIcon,
+  Spinner,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { Backdrop, EnterInput } from "ui/components";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { scoreAtom } from "state/game";
@@ -10,6 +18,7 @@ import { AppState, appStateAtom } from "state/app";
 function Leaderboard() {
   const [scores, setScores] = useState<ScoreEntry[]>([]);
   const setAppState = useSetRecoilState(appStateAtom);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
@@ -26,6 +35,7 @@ function Leaderboard() {
         });
       }
 
+      setLoading(false);
       setScores(scores);
     };
     fetch();
@@ -61,43 +71,61 @@ function Leaderboard() {
         >
           LEADERBOARD
         </Text>
-        {scores.map((score, index) => {
-          return (
-            <HStack key={index} width="100%" mb="-10px">
-              <Text
-                fontSize="32px"
-                fontWeight="extrabold"
-                color={getColor(index)}
-                alignSelf="flex-start"
-              >
-                {index + 1}.{" "}
-              </Text>
-              <Text
-                key={index}
-                fontSize="32px"
-                fontFamily="body"
-                color="white"
-                textAlign="center"
-                alignSelf="flex-start"
-              >
-                {score.name}
-              </Text>
+        <Stack
+          width="100%"
+          height="100%"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {!loading ? (
+            scores.map((score, index) => {
+              return (
+                <HStack key={index} width="100%" mb="-10px">
+                  <Text
+                    fontSize="32px"
+                    fontWeight="extrabold"
+                    color={getColor(index)}
+                    alignSelf="flex-start"
+                  >
+                    {index + 1}.{" "}
+                  </Text>
+                  <Text
+                    key={index}
+                    fontSize="32px"
+                    fontFamily="body"
+                    color="white"
+                    textAlign="center"
+                    alignSelf="flex-start"
+                  >
+                    {score.name}
+                  </Text>
 
-              <Text
-                fontSize="32px"
-                fontWeight="extrabold"
-                color={getColor(index)}
-                ml="auto"
-              >
-                {score.score.toString().padStart(6, "0")}
-              </Text>
-            </HStack>
-          );
-        })}
+                  <Text
+                    fontSize="32px"
+                    fontWeight="extrabold"
+                    color={getColor(index)}
+                    ml="auto"
+                  >
+                    {score.score.toString().padStart(6, "0")}
+                  </Text>
+                </HStack>
+              );
+            })
+          ) : (
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.600"
+              color="white"
+              size="xl"
+            />
+          )}
+        </Stack>
         <Button
           rightIcon={<ArrowLeftIcon />}
           mt="auto"
           mb="32px"
+          height="60px"
           onClick={() => {
             setAppState(AppState.START);
           }}
