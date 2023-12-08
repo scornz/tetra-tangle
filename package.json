@@ -8,8 +8,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
+    "deploy": "vite build && gh-pages -d dist",
     "cleanup": "node ./scripts/cleanup.js",
     "prepare": "husky install",
     "preinstall": "git submodule update --init --recursive"
@@ -39,6 +40,7 @@
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "gh-pages": "^6.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.3.0",
     "prettier": "2.8.8",
