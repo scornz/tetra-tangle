@@ -132,6 +132,7 @@ export class Game extends GameEntity {
    * The player has topped out, and the game is over.
    */
   gameOver() {
+    console.log("game over?");
     // Change app state to submit a score
     setRecoil(appStateAtom, AppState.SUBMIT_SCORE);
   }

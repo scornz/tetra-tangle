@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Box, Button, Stack, Text } from "@chakra-ui/react";
 import { Backdrop } from "ui/components";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { AppState, appStateAtom } from "state/app";
+import { MainScene } from "game/scenes";
+import { Engine } from "engine";
 
 function Home() {
   const setAppState = useSetRecoilState(appStateAtom);
@@ -25,7 +27,14 @@ function Home() {
         >
           Tetra Tangle
         </Text>
-        <Button onClick={() => setAppState(AppState.PLAYING)}>Play</Button>
+        <Button
+          onClick={() => {
+            Engine.instance.setScene(MainScene);
+            setAppState(AppState.PLAYING);
+          }}
+        >
+          Play
+        </Button>
       </Stack>
     </Box>
   );

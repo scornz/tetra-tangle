@@ -1,18 +1,29 @@
-import { RenderEngine } from "./RenderEngine";
-import { RenderLoop } from "./RenderLoop";
-import { DebugUI } from "./interface/DebugUI";
-import { Sizes } from "./Sizes";
-import { Camera } from "./Camera";
-import { Resources } from "./Resources";
-import { InfoConfig, InfoUI } from "./interface/InfoUI";
-import { Loader } from "./interface/Loader";
-import { Raycaster } from "./Raycaster";
-import { Scene } from "./Scene";
-import { Input } from "./Input";
+import {
+  Camera,
+  Input,
+  Raycaster,
+  RenderEngine,
+  RenderLoop,
+  Resources,
+  Scene,
+  Sizes,
+} from ".";
 
-export class Engine {
+import { DebugUI, InfoUI, Loader, InfoConfig } from "./interface";
+import { EventEmitter } from "./utilities";
+
+export class Engine extends EventEmitter {
+  private static _instance: Engine;
+  public static get instance() {
+    return Engine._instance;
+  }
+
   public readonly camera!: Camera;
-  private scene!: Scene;
+  private _scene!: Scene;
+  public get scene() {
+    return this._scene;
+  }
+
   public readonly renderEngine!: RenderEngine;
   public readonly time!: RenderLoop;
   public readonly debug!: DebugUI;
@@ -33,8 +44,15 @@ export class Engine {
     startScene: typeof Scene;
     info?: InfoConfig;
   }) {
+    super();
+
     if (!canvas) {
       throw new Error("No canvas provided");
+    }
+
+    // There should only be one engine
+    if (Engine._instance) {
+      throw new Error("Engine already instantiated");
     }
 
     this.canvas = canvas;
@@ -44,7 +62,7 @@ export class Engine {
     this.sizes = new Sizes(this);
     this.debug = new DebugUI();
     this.time = new RenderLoop(this);
-    this.scene = new startScene(this);
+    this._scene = new startScene(this);
     this.camera = new Camera(this);
     this.raycaster = new Raycaster(this);
     this.infoUI = new InfoUI(info);
@@ -52,6 +70,9 @@ export class Engine {
     this.resources = new Resources(this.scene.resources);
     this.loader = new Loader();
     this.input = new Input(this);
+
+    // Set the engine atom to this engine
+    Engine._instance = this;
 
     this.resources.on("loaded", () => {
       this.scene.init();
@@ -66,8 +87,10 @@ export class Engine {
   /**
    * Change the active scene
    */
-  setScene(scene: Scene) {
-    this.scene = scene;
+  setScene(scene: typeof Scene) {
+    this._scene = new scene(this);
+    this._scene.init();
+    this.emit("sceneChanged", this._scene);
   }
 
   /**
