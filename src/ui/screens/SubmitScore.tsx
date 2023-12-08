@@ -1,11 +1,13 @@
 import { Box, Stack, Text } from "@chakra-ui/react";
 import { Backdrop, EnterInput } from "ui/components";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { scoreAtom } from "state/game";
 import { submitScore } from "api/leaderboard";
+import { AppState, appStateAtom } from "state/app";
 
 function SubmitScore() {
   const score = useRecoilValue(scoreAtom);
+  const setAppState = useSetRecoilState(appStateAtom);
 
   // Induce callback and clear input
   const uploadScore = async (text: string) => {
@@ -13,6 +15,7 @@ function SubmitScore() {
     // Submit the score
     await submitScore(name, score);
     console.log(`Score submitted under name [${name}] and value [${score}]`);
+    setAppState(AppState.LEADERBOARD);
   };
 
   return (

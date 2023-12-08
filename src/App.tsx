@@ -9,9 +9,7 @@ import { AppState, appStateAtom } from "state/app";
 import { Fonts, theme } from "ui/style";
 
 // All screens
-import Home from "ui/screens/Home";
-import { Game } from "ui/screens";
-import SubmitScore from "ui/screens/SubmitScore";
+import { Game, Leaderboard, SubmitScore, Home } from "ui/screens";
 
 /**
  * Base provider for app
@@ -43,7 +41,7 @@ function Router() {
       case AppState.SUBMIT_SCORE:
         return <SubmitScore />;
       case AppState.LEADERBOARD:
-        return <div>Leaderboard</div>;
+        return <Leaderboard />;
     }
   };
 
