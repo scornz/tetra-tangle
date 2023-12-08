@@ -193,41 +193,52 @@ export class Board extends GameEntity {
    * @param clearType Type of line clear that this would be (tspin, etc.)
    */
   updateScore(cleared: number, clearType: TetrominoClearType) {
+    let difficult = false;
+    let scoreType = null;
     switch (true) {
       case clearType == TetrominoClearType.NORMAL && cleared == 1:
-        this.game.addScore(ScoreType.SINGLE);
+        scoreType = ScoreType.SINGLE;
         break;
       case clearType == TetrominoClearType.NORMAL && cleared == 2:
-        this.game.addScore(ScoreType.DOUBLE);
+        scoreType = ScoreType.DOUBLE;
         break;
       case clearType == TetrominoClearType.NORMAL && cleared == 3:
-        this.game.addScore(ScoreType.TRIPLE);
+        scoreType = ScoreType.TRIPLE;
         break;
       case clearType == TetrominoClearType.NORMAL && cleared == 4:
-        this.game.addScore(ScoreType.TETRIS);
+        scoreType = ScoreType.TETRIS;
+        difficult = true;
         break;
       case clearType == TetrominoClearType.TSPIN && cleared == 0:
-        this.game.addScore(ScoreType.TSPIN_NONE);
+        scoreType = ScoreType.TSPIN_NONE;
         break;
       case clearType == TetrominoClearType.TSPIN && cleared == 1:
-        this.game.addScore(ScoreType.TSPIN_SINGLE);
+        scoreType = ScoreType.TSPIN_SINGLE;
+        difficult = true;
         break;
       case clearType == TetrominoClearType.TSPIN && cleared == 2:
-        this.game.addScore(ScoreType.TSPIN_DOUBLE);
+        scoreType = ScoreType.TSPIN_DOUBLE;
+        difficult = true;
         break;
       case clearType == TetrominoClearType.TSPIN && cleared == 3:
-        this.game.addScore(ScoreType.TSPIN_TRIPLE);
+        scoreType = ScoreType.TSPIN_TRIPLE;
+        difficult = true;
         break;
       case clearType == TetrominoClearType.TSPIN_MINI && cleared == 0:
-        this.game.addScore(ScoreType.TSPIN_MINI_NONE);
+        scoreType = ScoreType.TSPIN_MINI_NONE;
         break;
       case clearType == TetrominoClearType.TSPIN_MINI && cleared == 1:
-        this.game.addScore(ScoreType.TSPIN_MINI_SINGLE);
+        scoreType = ScoreType.TSPIN_MINI_SINGLE;
+        difficult = true;
         break;
       case clearType == TetrominoClearType.TSPIN_MINI && cleared == 2:
-        this.game.addScore(ScoreType.TSPIN_MINI_DOUBLE);
+        scoreType = ScoreType.TSPIN_MINI_DOUBLE;
+        difficult = true;
         break;
     }
+
+    // Add the score to the final score
+    if (scoreType != null) this.game.addScore(scoreType, 0, cleared);
   }
 
   /**

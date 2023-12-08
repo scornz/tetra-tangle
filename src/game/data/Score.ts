@@ -30,7 +30,7 @@ export const SCORE_VALUES: { [key in ScoreType]: number } = {
   [ScoreType.TETRIS]: 800,
 
   /* T-Spin line clears */
-  [ScoreType.TSPIN_MINI_NONE]: 100,
+  [ScoreType.TSPIN_MINI_NONE]: 0,
   [ScoreType.TSPIN_NONE]: 400,
   [ScoreType.TSPIN_MINI_SINGLE]: 200,
   [ScoreType.TSPIN_SINGLE]: 800,

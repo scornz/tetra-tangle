@@ -15,6 +15,7 @@ export class Game extends GameEntity {
   // The current speed that a tetromino is falling at
   speed: number = 1;
   level: number = 1;
+  linesCleared: number = 0;
 
   numPreview: number = 5;
 
@@ -96,9 +97,12 @@ export class Game extends GameEntity {
    * @param scoreType The type of score that this is (changes how the amount is calculated)
    * @param val An additional value to add to the score (usually the number of cells dropped)
    */
-  addScore(scoreType: ScoreType, val: number = 0) {
+  addScore(scoreType: ScoreType, val: number = 0, lines: number = 0) {
     // TODO: Implement combo and back-to-back
     console.log("Scored: ", scoreType);
+
+    this.linesCleared += lines;
+    this.updateLevelandSpeed();
 
     // val in this case is the number of cells dropped
     if (scoreType == ScoreType.SOFT_DROP || scoreType == ScoreType.HARD_DROP) {
@@ -110,6 +114,31 @@ export class Game extends GameEntity {
     }
     // Update atom
     setRecoil(scoreAtom, this.score);
+  }
+
+  updateLevelandSpeed() {
+    this.level = Math.floor(this.linesCleared / 10) + 1;
+
+    // Calculate drop speed based on frames per row
+    // Most Tetris games were based on 60fps systems
+    let framesPerDrop = 0;
+    if (this.level < 10) {
+      framesPerDrop = 48 / this.level - 0.5;
+    } else if (this.level <= 12) {
+      framesPerDrop = 5;
+    } else if (this.level <= 15) {
+      framesPerDrop = 4;
+    } else if (this.level <= 18) {
+      framesPerDrop = 3;
+    } else if (this.level <= 28) {
+      framesPerDrop = 2;
+    } else {
+      framesPerDrop = 1;
+    }
+    // Convert speed to seconds
+    this.speed = framesPerDrop / 60;
+
+    console.log(`Current level (${this.level}) and speed (${this.speed})`);
   }
 
   spawn() {
