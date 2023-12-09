@@ -88,6 +88,11 @@ export class Engine extends EventEmitter {
    * Change the active scene
    */
   setScene(scene: typeof Scene) {
+    // Destroy the old scene if it exists
+    if (this._scene) {
+      this._scene.destroy();
+    }
+
     this._scene = new scene(this);
     this._scene.init();
     this.emit("sceneChanged", this._scene);

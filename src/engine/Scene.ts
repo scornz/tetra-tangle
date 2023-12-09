@@ -49,5 +49,12 @@ export class Scene extends THREE.Scene implements Entity {
     }
   }
 
+  destroy(): void {
+    // Destroy all entities in the scene, if they have a destroy method
+    for (const e of this.entities) {
+      if (e.destroy) e.destroy();
+    }
+  }
+
   resize(): void {}
 }

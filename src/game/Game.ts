@@ -161,7 +161,6 @@ export class Game extends GameEntity {
    * The player has topped out, and the game is over.
    */
   gameOver() {
-    console.log("game over?");
     // Change app state to submit a score
     setRecoil(appStateAtom, AppState.SUBMIT_SCORE);
   }
@@ -211,5 +210,11 @@ export class Game extends GameEntity {
     if (this.tetromino?.placed && this.active) {
       this.spawn();
     }
+  }
+
+  destroy(): void {
+    super.destroy();
+    // Remove the listener
+    this.scene.engine.input.removeListener(this.handleInputCallback);
   }
 }

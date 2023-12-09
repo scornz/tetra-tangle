@@ -8,10 +8,6 @@ import { scoreAtom } from "state/game";
 function Game() {
   const score = useRecoilValue(scoreAtom);
 
-  useEffect(() => {
-    console.log(score);
-  }, [score]);
-
   return (
     <Box h="100%">
       <Text
