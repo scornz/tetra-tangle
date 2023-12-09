@@ -10,5 +10,5 @@
 export const DREAMLO = {
   PUBLIC_KEY: "657093218f40bb1054d884bb",
   PRIVATE_KEY: "1tWBXiiOi0uwZKArsAhIWABxTUmTRsuE-Q_bpuSgTodQ",
-  BASE_URL: "http://dreamlo.com/lb/",
+  BASE_URL: "https://www.dreamlo.com/lb/",
 };

@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "vite build && gh-pages -d dist",
+    "deploy": "vite build && cp CNAME ./dist && gh-pages -d dist",
     "cleanup": "node ./scripts/cleanup.js",
     "prepare": "husky install",
     "preinstall": "git submodule update --init --recursive"
