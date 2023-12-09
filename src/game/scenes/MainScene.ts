@@ -36,7 +36,7 @@ export class MainScene extends Scene {
     this.add(rightWall);
     this.add(new THREE.AmbientLight(0xffffff, 0.5));
 
-    let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.castShadow = true;
     directionalLight.position.set(2, 2, 2);
 

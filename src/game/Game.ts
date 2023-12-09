@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { Scene, GameEntity, InputType } from "engine";
 import { Hold, Preview, Board } from "./containers";
-import { Tetromino, TetrominoType } from "./objects";
+import { LevelBar, Tetromino, TetrominoType } from "./objects";
 import { shuffle } from "utils";
 import { setRecoil } from "recoil-nexus";
 import { scoreAtom } from "state/game";
@@ -22,6 +22,7 @@ export class Game extends GameEntity {
   public readonly board!: Board;
   public readonly preview!: Preview;
   public readonly hold!: Hold;
+  public readonly levelBar!: LevelBar;
 
   private tetromino: Tetromino | null = null;
   private heldTetromino: TetrominoType | null = null;
@@ -56,6 +57,14 @@ export class Game extends GameEntity {
       this,
       this.numPreview,
       new THREE.Vector3(8, 18, 0)
+    );
+
+    this.levelBar = new LevelBar(
+      scene,
+      0xffff00,
+      1,
+      new THREE.Vector3(-15, 0, 0),
+      20
     );
 
     for (let i = 0; i < this.numPreview; i++) {
@@ -118,6 +127,7 @@ export class Game extends GameEntity {
 
   updateLevelandSpeed() {
     this.level = Math.floor(this.linesCleared / 10) + 1;
+    this.levelBar.setProgress((this.linesCleared % 10) / 10);
 
     // Calculate drop speed based on frames per row
     // Most Tetris games were based on 60fps systems

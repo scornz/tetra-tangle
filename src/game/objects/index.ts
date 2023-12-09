@@ -5,3 +5,4 @@
 export * from "./Cell";
 export * from "./Tetromino";
 export * from "./GhostTetromino";
+export * from "./LevelBar";
