@@ -4,7 +4,7 @@ import { Hold, Preview, Board } from "./containers";
 import { LevelBar, Tetromino, TetrominoType } from "./objects";
 import { shuffle } from "utils";
 import { setRecoil } from "recoil-nexus";
-import { scoreAtom } from "state/game";
+import { levelAtom, linesClearedAtom, scoreAtom } from "state/game";
 import { SCORE_VALUES, ScoreType } from "./data";
 import { AppState, appStateAtom } from "state/app";
 
@@ -128,6 +128,9 @@ export class Game extends GameEntity {
   updateLevelandSpeed() {
     this.level = Math.floor(this.linesCleared / 10) + 1;
     this.levelBar.setProgress((this.linesCleared % 10) / 10);
+
+    setRecoil(levelAtom, this.level);
+    setRecoil(linesClearedAtom, this.linesCleared);
 
     // Calculate drop speed based on frames per row
     // Most Tetris games were based on 60fps systems
