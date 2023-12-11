@@ -13,6 +13,7 @@ import {
   TetrominoType,
 } from "game/objects/Tetromino";
 import { ScoreType } from "game/data";
+import { lerp } from "three/src/math/MathUtils.js";
 
 /**
  * An example layout of some possible tetrominos
@@ -258,6 +259,17 @@ export class Board extends GameEntity {
   }
 
   update(delta: number): void {
-    // throw new Error("Method not implemented.");
+    // Diminish intensity of emissive material
+    for (const c of this.layoutCells) {
+      for (const cell of c) {
+        if (cell == null) continue;
+
+        cell.material.emissiveIntensity = lerp(
+          cell.material.emissiveIntensity,
+          0.5,
+          delta
+        );
+      }
+    }
   }
 }

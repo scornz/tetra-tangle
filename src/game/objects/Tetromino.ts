@@ -28,15 +28,29 @@ export enum TetrominoType {
 export const TETROMINO_COLORS: {
   [id in TetrominoType]: THREE.ColorRepresentation;
 } = {
-  1: 0x6e9fbe,
-  2: 0xc1c16c,
-  3: 0xa762bc,
-  4: 0x5f63bb,
-  5: 0xb98c64,
-  6: 0x81bf6a,
-  7: 0xcb596e,
+  [TetrominoType.I]: 0x6e9fbe,
+  [TetrominoType.O]: 0xc1c16c,
+  [TetrominoType.T]: 0xa762bc,
+  [TetrominoType.J]: 0x5f63bb,
+  [TetrominoType.L]: 0xb98c64,
+  [TetrominoType.S]: 0x81bf6a,
+  [TetrominoType.Z]: 0xcb596e,
   // Purple color used for debugging
-  8: 0x924dbf,
+  [TetrominoType.X]: 0x924dbf,
+};
+
+export const TETROMINO_COLORS_EMISSIVE: {
+  [id in TetrominoType]: number;
+} = {
+  [TetrominoType.I]: 3.5,
+  [TetrominoType.O]: 2.0,
+  [TetrominoType.T]: 5.0,
+  [TetrominoType.J]: 7.2,
+  [TetrominoType.L]: 4.5,
+  [TetrominoType.S]: 2.7,
+  [TetrominoType.Z]: 5.5,
+  // Purple color used for debugging
+  [TetrominoType.X]: 3,
 };
 
 export enum TetrominoClearType {
@@ -111,6 +125,7 @@ export class Tetromino extends GameEntity {
       for (let c = 0; c < shape[r].length; c++) {
         if (shape[r][c] != 0) {
           const cell = new Cell(scene, TETROMINO_COLORS[type]);
+          cell.material.emissiveIntensity = TETROMINO_COLORS_EMISSIVE[type];
           this.cells.push(cell);
         }
       }
