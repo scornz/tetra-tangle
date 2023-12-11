@@ -28,6 +28,17 @@ export const INPUT_MAP: { [key: string]: InputType } = {
   Space: InputType.HARD_DROP,
 };
 
+export const REVERSE_INPUT_MAP: { [key in InputType]: string } = {
+  [InputType.MOVE_RIGHT]: "ArrowRight",
+  [InputType.MOVE_LEFT]: "ArrowLeft",
+  [InputType.ROTATE_RIGHT]: "ArrowUp",
+  [InputType.ROTATE_LEFT]: "KeyZ",
+  [InputType.ROTATE_180]: "KeyX",
+  [InputType.HOLD]: "KeyC",
+  [InputType.SOFT_DROP]: "ArrowDown",
+  [InputType.HARD_DROP]: "Space",
+};
+
 export class Input {
   // The current keys being held down
   private keysHeld: Map<InputType, number> = new Map<InputType, number>();
@@ -38,6 +49,30 @@ export class Input {
     // Process keyboard down and up events
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
     window.addEventListener("keyup", this.handleKeyUp.bind(this));
+  }
+
+  /**
+   * Get the key for the given input
+   */
+  getKey(input: InputType) {
+    return REVERSE_INPUT_MAP[input];
+  }
+
+  /*
+   * Change the key for the given input
+   */
+  changeKey(input: InputType, key: string) {
+    if (key in INPUT_MAP) return false;
+
+    const currentKey = REVERSE_INPUT_MAP[input];
+    // Remove old key from input map
+    delete INPUT_MAP[currentKey];
+
+    // Update the input map
+    INPUT_MAP[key] = input;
+    REVERSE_INPUT_MAP[input] = key;
+
+    return true;
   }
 
   private handleKeyDown(event: KeyboardEvent) {

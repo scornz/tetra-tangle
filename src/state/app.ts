@@ -5,6 +5,7 @@ export enum AppState {
   PLAYING,
   SUBMIT_SCORE,
   LEADERBOARD,
+  SETTINGS,
 }
 
 export const appStateAtom = atom<AppState>({

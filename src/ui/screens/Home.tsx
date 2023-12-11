@@ -35,6 +35,13 @@ function Home() {
         >
           Play
         </Button>
+        <Button
+          onClick={() => {
+            setAppState(AppState.SETTINGS);
+          }}
+        >
+          Settings
+        </Button>
       </Stack>
     </Box>
   );
