@@ -382,10 +382,11 @@ export class Tetromino extends GameEntity {
     else if (this.game.speed > MOVEMENT.SD && keyHeld == InputType.SOFT_DROP) {
       this.dropTime = 0;
       this.softDropTime += delta;
+      let moved = true;
       // Drop multiple rows if necessary
-      while (this.softDropTime > MOVEMENT.SD) {
+      while (this.softDropTime > MOVEMENT.SD && moved) {
         this.softDropTime -= MOVEMENT.SD;
-        this.move(0, -1);
+        moved = this.move(0, -1);
       }
     }
 
@@ -399,10 +400,12 @@ export class Tetromino extends GameEntity {
       (keyHeld == InputType.MOVE_LEFT || keyHeld == InputType.MOVE_RIGHT) &&
       keyHeldTime > MOVEMENT.DAS
     ) {
-      if (this.arrTime >= MOVEMENT.ARR) {
-        // Move the tetromino
-        this.move(keyHeld == InputType.MOVE_LEFT ? -1 : 1, 0);
-        this.arrTime = 0;
+      let moved = true;
+      // Move the tetromino by 1 unit (could be multiple frames)
+      // Stop if ARR time stops, or moved is false
+      while (this.arrTime > MOVEMENT.ARR && moved) {
+        this.arrTime -= MOVEMENT.ARR;
+        moved = this.move(keyHeld == InputType.MOVE_LEFT ? -1 : 1, 0);
       }
       this.arrTime += delta;
     } else {
