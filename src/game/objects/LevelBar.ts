@@ -41,7 +41,7 @@ export class LevelBar extends GameEntity {
     outline.position.copy(pos);
     outline.position.y = pos.y + maxHeight / 2;
 
-    box.scale.y = 0.01;
+    box.scale.y = 0.04;
     container.add(box);
     container.add(outline);
 
@@ -54,17 +54,26 @@ export class LevelBar extends GameEntity {
    * Set the current level progress.
    * @param progress A value between 0 and 1.
    */
-  setProgress(progress: number) {
-    this.progress = progress;
+  addProgress(progress: number) {
+    this.progress += progress;
   }
 
   update(delta: number): void {
     // Set the scale and position of the bar.
     this.bar.scale.y = lerp(
       this.bar.scale.y,
-      this.progress * this.maxHeight + 0.01,
-      3 * delta
+      this.progress * this.maxHeight + 0.4,
+      6 * delta
     );
+
+    // Make it so bar always goes to the top
+
+    if (this.bar.scale.y > this.maxHeight) {
+      this.bar.scale.y = 0.4;
+      this.progress -= 1;
+    }
+
+    // Update position of bar
     this.bar.position.y = this.pos.y + this.bar.scale.y / 2;
   }
 }

@@ -111,7 +111,7 @@ export class Game extends GameEntity {
     console.log("Scored: ", scoreType);
 
     this.linesCleared += lines;
-    this.updateLevelandSpeed();
+    this.updateLevelandSpeed(lines);
 
     // val in this case is the number of cells dropped
     if (scoreType == ScoreType.SOFT_DROP || scoreType == ScoreType.HARD_DROP) {
@@ -125,9 +125,9 @@ export class Game extends GameEntity {
     setRecoil(scoreAtom, this.score);
   }
 
-  updateLevelandSpeed() {
+  updateLevelandSpeed(lines: number) {
     this.level = Math.floor(this.linesCleared / 10) + 1;
-    this.levelBar.setProgress((this.linesCleared % 10) / 10);
+    this.levelBar.addProgress(lines / 10);
 
     setRecoil(levelAtom, this.level);
     setRecoil(linesClearedAtom, this.linesCleared);
