@@ -6,14 +6,11 @@ export class MainScene extends Scene {
   resources: Resource[] = [];
 
   init() {
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(20, 10),
+    const floor = new THREE.Mesh(
+      new THREE.BoxGeometry(12, 1, 1),
       new THREE.MeshStandardMaterial({ color: 0xffffff })
     );
-
-    plane.rotation.x = -Math.PI / 2;
-    plane.position.y = -0.5;
-    plane.receiveShadow = true;
+    floor.position.y = -1;
 
     const leftWall = new THREE.Mesh(
       new THREE.BoxGeometry(1, 20, 1),
@@ -31,7 +28,7 @@ export class MainScene extends Scene {
     rightWall.position.y = 9.5;
     rightWall.castShadow = true;
 
-    this.add(plane);
+    this.add(floor);
     this.add(leftWall);
     this.add(rightWall);
     this.add(new THREE.AmbientLight(0xffffff, 0.5));

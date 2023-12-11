@@ -47,7 +47,7 @@ export class RenderEngine implements Entity {
           // Only colors in HDR will be bloomed
           luminanceThreshold: 1.0,
           luminanceSmoothing: 0.2,
-          intensity: 3.0,
+          intensity: 2.0,
         })
       )
     );

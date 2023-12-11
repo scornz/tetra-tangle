@@ -9,25 +9,45 @@ import { lerp } from "three/src/math/MathUtils.js";
  */
 export class LevelBar extends GameEntity {
   progress: number = 0;
+  bar: THREE.Object3D;
 
   constructor(
     scene: Scene,
-    color: THREE.ColorRepresentation = 0xffff00,
+    color: THREE.ColorRepresentation = 0xffffed,
     width: number = 1,
     private pos: THREE.Vector3,
     private maxHeight: number = 10
   ) {
+    const container = new THREE.Object3D();
+
     const box = new THREE.Mesh(
       new THREE.BoxGeometry(width, 1, width),
       new THREE.MeshStandardMaterial({
+        toneMapped: false,
         color: color,
+        emissive: color,
+        emissiveIntensity: 0.8,
+      })
+    );
+
+    const outline = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.BoxGeometry(width, maxHeight, width)),
+      new THREE.MeshStandardMaterial({
+        color: 0xffffff,
       })
     );
 
     box.position.copy(pos);
-    box.scale.y = 0.01;
+    outline.position.copy(pos);
+    outline.position.y = pos.y + maxHeight / 2;
 
-    super(scene, box);
+    box.scale.y = 0.01;
+    container.add(box);
+    container.add(outline);
+
+    super(scene, container);
+
+    this.bar = box;
   }
 
   /**
@@ -40,11 +60,11 @@ export class LevelBar extends GameEntity {
 
   update(delta: number): void {
     // Set the scale and position of the bar.
-    this.obj.scale.y = lerp(
-      this.obj.scale.y,
+    this.bar.scale.y = lerp(
+      this.bar.scale.y,
       this.progress * this.maxHeight + 0.01,
       3 * delta
     );
-    this.obj.position.y = this.pos.y + this.obj.scale.y / 2;
+    this.bar.position.y = this.pos.y + this.bar.scale.y / 2;
   }
 }
