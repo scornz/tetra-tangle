@@ -84,6 +84,8 @@ export class Tetromino extends GameEntity {
   private rot: number = 0;
 
   private dropTime: number = 0;
+  private softDropTime: number = 0;
+
   private lockDownTime: number = 0;
   private arrTime: number = MOVEMENT.ARR;
 
@@ -369,13 +371,27 @@ export class Tetromino extends GameEntity {
     const [keyHeld, keyHeldTime] = this.input.getHeldKey();
 
     // Handle falling of tetromino, use soft drop speed if soft drop key is held
-    if (
-      this.dropTime > this.game.speed ||
-      (this.dropTime > MOVEMENT.SD && keyHeld == InputType.SOFT_DROP)
-    ) {
+    if (this.dropTime > this.game.speed) {
+      // Keep moving down one block until the time is made up
+      while (this.dropTime > this.game.speed) {
+        this.dropTime -= this.game.speed;
+        this.move(0, -1);
+      }
+    }
+    // Only allow soft dropping when game speed is slower than soft drop seed
+    else if (this.game.speed > MOVEMENT.SD && keyHeld == InputType.SOFT_DROP) {
       this.dropTime = 0;
-      // Move this tetromino down
-      this.move(0, -1);
+      this.softDropTime += delta;
+      // Drop multiple rows if necessary
+      while (this.softDropTime > MOVEMENT.SD) {
+        this.softDropTime -= MOVEMENT.SD;
+        this.move(0, -1);
+      }
+    }
+
+    // Reset soft drop time when key is released
+    if (keyHeld != InputType.SOFT_DROP) {
+      this.softDropTime = 0;
     }
 
     // If the held key is movement to the right or left
