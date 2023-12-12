@@ -7,10 +7,9 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Backdrop, EnterInput } from "ui/components";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { scoreAtom } from "state/game";
-import { ScoreEntry, getScores, submitScore } from "api/leaderboard";
+import { Backdrop } from "ui/components";
+import { useSetRecoilState } from "recoil";
+import { ScoreEntry, getScores } from "api/leaderboard";
 import { useEffect, useState } from "react";
 import { ArrowLeftIcon } from "@chakra-ui/icons";
 import { AppState, appStateAtom } from "state/app";
@@ -61,9 +60,9 @@ function Leaderboard() {
         direction="column"
       >
         <Text
-          fontSize="90px"
+          fontSize="100px"
           fontWeight="extrabold"
-          fontFamily="body"
+          fontFamily="special"
           color="white"
           textAlign="center"
           mb="auto"
@@ -76,6 +75,7 @@ function Leaderboard() {
           height="100%"
           justifyContent="center"
           alignItems="center"
+          mt="-3rem"
         >
           {!loading ? (
             scores.map((score, index) => {

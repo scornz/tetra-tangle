@@ -10,7 +10,7 @@ function Backdrop() {
       h="100%"
       bg="black"
       zIndex="-1"
-      opacity="0.7"
+      opacity="0.8"
     />
   );
 }

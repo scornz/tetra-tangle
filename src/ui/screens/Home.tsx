@@ -17,7 +17,7 @@ import { Engine } from "engine";
 
 import logo from "assets/tetra-tangle.png";
 import backgroundVideo from "assets/tetra-tangle-background.mp4";
-import { SettingsIcon } from "@chakra-ui/icons";
+import { SettingsIcon, StarIcon } from "@chakra-ui/icons";
 import { Settings } from ".";
 
 function Home() {
@@ -81,6 +81,16 @@ function Home() {
             <Text fontSize="55px" fontFamily="special">
               Play
             </Text>
+          </Button>
+          <Button
+            width="50px"
+            height="100%"
+            rounded="20"
+            onClick={() => {
+              setAppState(AppState.LEADERBOARD);
+            }}
+          >
+            <StarIcon />
           </Button>
           <Button
             width="50px"

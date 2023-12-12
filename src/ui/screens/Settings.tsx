@@ -1,19 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { Box, Button, HStack, Input, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, HStack, Stack, Text } from "@chakra-ui/react";
 import { Backdrop, SettingsInput } from "ui/components";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { AppState, appStateAtom } from "state/app";
-import { MainScene } from "game/scenes";
 import { Engine, INPUT_NAMES, InputType, REVERSE_INPUT_MAP } from "engine";
 import { SettingsInputType } from "ui/components/SettingsInput";
 import { convertCodeToText } from "utils";
+import { ArrowLeftIcon } from "@chakra-ui/icons";
 
 type Props = {
   onClickBack: () => void;
 };
 
 function Settings({ onClickBack }: Props) {
-  const setAppState = useSetRecoilState(appStateAtom);
   const [currentInput, setCurrentInput] = useState<null | InputType>(null);
 
   const onKeyDown = useCallback(
@@ -61,72 +58,135 @@ function Settings({ onClickBack }: Props) {
         direction="column"
       >
         <Text
-          fontSize="60px"
+          fontSize="80px"
           fontWeight="extrabold"
-          fontFamily="heading"
+          fontFamily="special"
           color="white"
+          mb="-1.5rem"
+          mt="-1rem"
         >
           Settings
         </Text>
-        {Object.entries(InputType)
-          .filter(([name, _]) => isNaN(Number(name)))
-          .map(([_, value]) => (
-            <HStack key={value} width="100%" maxWidth="400px">
+        <HStack h="100%" spacing={20} padding="2rem" align="flex-start">
+          <Stack>
+            <Text
+              fontSize="50px"
+              fontWeight="extrabold"
+              fontFamily="special"
+              color="white"
+              width="400px"
+              mb="-1rem"
+            >
+              Controls
+            </Text>
+            {Object.entries(InputType)
+              .filter(([name, _]) => isNaN(Number(name)))
+              .map(([_, value]) => (
+                <HStack key={value} width="100%" maxWidth="400px">
+                  <Text
+                    fontSize="25px"
+                    fontWeight="bold"
+                    fontFamily="heading"
+                    color="white"
+                  >
+                    {INPUT_NAMES[value as InputType]}
+                  </Text>
+                  <Button
+                    onClick={() => {
+                      setCurrentInput(value as InputType);
+                    }}
+                    ml="auto"
+                    width="130px"
+                    height="40px"
+                  >
+                    {currentInput === value
+                      ? "Press a key"
+                      : convertCodeToText(
+                          REVERSE_INPUT_MAP[value as InputType]
+                        )}
+                  </Button>
+                </HStack>
+              ))}
+          </Stack>
+          <Stack>
+            <Text
+              fontSize="50px"
+              fontWeight="extrabold"
+              fontFamily="special"
+              color="white"
+              width="400px"
+              mb="-1rem"
+              mt="-0.5rem"
+            >
+              Movement
+            </Text>
+            <HStack width="100%" maxWidth="400px">
               <Text
-                fontSize="30px"
+                fontSize="25px"
                 fontWeight="bold"
                 fontFamily="heading"
                 color="white"
               >
-                {INPUT_NAMES[value as InputType]}
+                ARR
               </Text>
-              <Button
-                onClick={() => {
-                  setCurrentInput(value as InputType);
-                }}
-                ml="auto"
-                width="130px"
+              <Text
+                fontSize="15px"
+                fontWeight="bold"
+                fontFamily="heading"
+                color="white"
               >
-                {currentInput === value
-                  ? "Press a key"
-                  : convertCodeToText(REVERSE_INPUT_MAP[value as InputType])}
-              </Button>
+                (Auto Repeat Rate)
+              </Text>
+              <SettingsInput type={SettingsInputType.ARR} ml="auto" />
             </HStack>
-          ))}
-        <HStack width="100%" maxWidth="400px">
-          <Text
-            fontSize="30px"
-            fontWeight="bold"
-            fontFamily="heading"
-            color="white"
-          >
-            ARR
-          </Text>
-          <SettingsInput type={SettingsInputType.ARR} ml="auto" />
+            <HStack width="100%" maxWidth="400px">
+              <Text
+                fontSize="25px"
+                fontWeight="bold"
+                fontFamily="heading"
+                color="white"
+              >
+                DAS
+              </Text>
+              <Text
+                fontSize="15px"
+                fontWeight="bold"
+                fontFamily="heading"
+                color="white"
+              >
+                (Delayed Auto Shift)
+              </Text>
+              <SettingsInput type={SettingsInputType.DAS} ml="auto" />
+            </HStack>
+            <HStack width="100%" maxWidth="400px">
+              <Text
+                fontSize="25px"
+                fontWeight="bold"
+                fontFamily="heading"
+                color="white"
+              >
+                SD
+              </Text>
+              <Text
+                fontSize="15px"
+                fontWeight="bold"
+                fontFamily="heading"
+                color="white"
+              >
+                (Soft Drop)
+              </Text>
+              <SettingsInput type={SettingsInputType.SD} ml="auto" />
+            </HStack>
+          </Stack>
         </HStack>
-        <HStack width="100%" maxWidth="400px">
-          <Text
-            fontSize="30px"
-            fontWeight="bold"
-            fontFamily="heading"
-            color="white"
-          >
-            DAS
-          </Text>
-          <SettingsInput type={SettingsInputType.DAS} ml="auto" />
-        </HStack>
-        <HStack width="100%" maxWidth="400px">
-          <Text
-            fontSize="30px"
-            fontWeight="bold"
-            fontFamily="heading"
-            color="white"
-          >
-            SD
-          </Text>
-          <SettingsInput type={SettingsInputType.SD} ml="auto" />
-        </HStack>
-        <Button onClick={onClickBack}>Back</Button>
+        <Button
+          height="70px"
+          width="200px"
+          onClick={onClickBack}
+          rightIcon={<ArrowLeftIcon />}
+        >
+          Back
+        </Button>
       </Stack>
     </Box>
   );
