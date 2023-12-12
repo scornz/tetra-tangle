@@ -23,3 +23,13 @@ export const MOVEMENT = {
    */
   MAX_MOVE_LOCK_DOWN: 15,
 };
+
+/* NOTE: This is not the ideal place (nor the correct place to be loading
+      these values, but it's where they are, and where they will be, so I am doing
+      it here for ease of use.) */
+const savedARR = localStorage.getItem("arr");
+const savedDAS = localStorage.getItem("das");
+const savedSoftDrop = localStorage.getItem("sd");
+MOVEMENT.ARR = savedARR ? parseFloat(savedARR) : MOVEMENT.ARR;
+MOVEMENT.DAS = savedDAS ? parseFloat(savedDAS) : MOVEMENT.DAS;
+MOVEMENT.SD = savedSoftDrop ? parseFloat(savedSoftDrop) : MOVEMENT.SD;

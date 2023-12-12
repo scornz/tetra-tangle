@@ -1,3 +1,4 @@
+import { MOVEMENT } from "game/data";
 import { Engine } from "./Engine";
 
 /**
@@ -13,6 +14,20 @@ export enum InputType {
   SOFT_DROP,
   HARD_DROP,
 }
+
+/**
+ * Names of inputs for display
+ */
+export const INPUT_NAMES: { [key in InputType]: string } = {
+  [InputType.MOVE_RIGHT]: "Move Right",
+  [InputType.MOVE_LEFT]: "Move Left",
+  [InputType.ROTATE_RIGHT]: "Rotate Right",
+  [InputType.ROTATE_LEFT]: "Rotate Left",
+  [InputType.ROTATE_180]: "Rotate 180",
+  [InputType.HOLD]: "Hold Piece",
+  [InputType.SOFT_DROP]: "Soft Drop",
+  [InputType.HARD_DROP]: "Hard Drop",
+};
 
 /**
  * Default mapping of controls to keys

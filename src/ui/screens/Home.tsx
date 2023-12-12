@@ -4,11 +4,12 @@ import {
   Button,
   HStack,
   Image,
+  List,
   Stack,
   Text,
   styled,
 } from "@chakra-ui/react";
-import { Backdrop } from "ui/components";
+import { Backdrop, ListControls } from "ui/components";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { AppState, appStateAtom } from "state/app";
 import { MainScene } from "game/scenes";
@@ -17,12 +18,15 @@ import { Engine } from "engine";
 import logo from "assets/tetra-tangle.png";
 import backgroundVideo from "assets/tetra-tangle-background.mp4";
 import { SettingsIcon } from "@chakra-ui/icons";
+import { Settings } from ".";
 
 function Home() {
   const setAppState = useSetRecoilState(appStateAtom);
+  const [showSettings, setShowSettings] = useState(true);
 
   return (
     <Box h="100%">
+      {showSettings && <Settings onClickBack={() => setShowSettings(false)} />}
       <Box width="100%" height="100%" position="absolute" left="0" top="0">
         <Box
           as="video"
@@ -51,11 +55,17 @@ function Home() {
         justify="center"
         direction="column"
       >
-        <Image maxWidth="850px" minWidth="400px" width="100vmin" src={logo} />
+        <Image
+          maxHeight="850px"
+          minHeight="200px"
+          height="140vh"
+          src={logo}
+          my="1rem"
+        />
         <HStack
           maxWidth="450px"
           width="100%"
-          height="100px"
+          minHeight="100px"
           justifyContent="center"
           mx="1rem"
         >
@@ -77,12 +87,13 @@ function Home() {
             height="100%"
             rounded="20"
             onClick={() => {
-              setAppState(AppState.SETTINGS);
+              setShowSettings(true);
             }}
           >
             <SettingsIcon />
           </Button>
         </HStack>
+        <ListControls />
       </Stack>
     </Box>
   );

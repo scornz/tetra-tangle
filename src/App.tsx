@@ -42,8 +42,6 @@ function Router() {
         return <SubmitScore />;
       case AppState.LEADERBOARD:
         return <Leaderboard />;
-      case AppState.SETTINGS:
-        return <Settings />;
     }
   };
 

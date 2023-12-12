@@ -1,18 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
-import { Box, Button, HStack, Stack, Text } from "@chakra-ui/react";
-import { Backdrop } from "ui/components";
+import { Box, Button, HStack, Input, Stack, Text } from "@chakra-ui/react";
+import { Backdrop, SettingsInput } from "ui/components";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { AppState, appStateAtom } from "state/app";
 import { MainScene } from "game/scenes";
-import { Engine, InputType, REVERSE_INPUT_MAP } from "engine";
+import { Engine, INPUT_NAMES, InputType, REVERSE_INPUT_MAP } from "engine";
+import { SettingsInputType } from "ui/components/SettingsInput";
+import { convertCodeToText } from "utils";
 
-function Settings() {
+type Props = {
+  onClickBack: () => void;
+};
+
+function Settings({ onClickBack }: Props) {
   const setAppState = useSetRecoilState(appStateAtom);
   const [currentInput, setCurrentInput] = useState<null | InputType>(null);
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      console.log(e);
       if (currentInput === null) return;
 
       if (e.key === "Escape") {
@@ -37,7 +42,15 @@ function Settings() {
   }, [onKeyDown]);
 
   return (
-    <Box h="100%">
+    <Box
+      h="100%"
+      position="absolute"
+      left="0"
+      right="0"
+      top="0"
+      bottom="0"
+      zIndex={1}
+    >
       <Backdrop />
       <Stack
         h="100%"
@@ -55,16 +68,9 @@ function Settings() {
         >
           Settings
         </Text>
-        <Button
-          onClick={() => {
-            setAppState(AppState.START);
-          }}
-        >
-          Back
-        </Button>
         {Object.entries(InputType)
           .filter(([name, _]) => isNaN(Number(name)))
-          .map(([name, value]) => (
+          .map(([_, value]) => (
             <HStack key={value} width="100%" maxWidth="400px">
               <Text
                 fontSize="30px"
@@ -72,20 +78,55 @@ function Settings() {
                 fontFamily="heading"
                 color="white"
               >
-                {name}
+                {INPUT_NAMES[value as InputType]}
               </Text>
               <Button
                 onClick={() => {
                   setCurrentInput(value as InputType);
                 }}
                 ml="auto"
+                width="130px"
               >
                 {currentInput === value
                   ? "Press a key"
-                  : Engine.instance.input.getKey(value as InputType)}
+                  : convertCodeToText(REVERSE_INPUT_MAP[value as InputType])}
               </Button>
             </HStack>
           ))}
+        <HStack width="100%" maxWidth="400px">
+          <Text
+            fontSize="30px"
+            fontWeight="bold"
+            fontFamily="heading"
+            color="white"
+          >
+            ARR
+          </Text>
+          <SettingsInput type={SettingsInputType.ARR} ml="auto" />
+        </HStack>
+        <HStack width="100%" maxWidth="400px">
+          <Text
+            fontSize="30px"
+            fontWeight="bold"
+            fontFamily="heading"
+            color="white"
+          >
+            DAS
+          </Text>
+          <SettingsInput type={SettingsInputType.DAS} ml="auto" />
+        </HStack>
+        <HStack width="100%" maxWidth="400px">
+          <Text
+            fontSize="30px"
+            fontWeight="bold"
+            fontFamily="heading"
+            color="white"
+          >
+            SD
+          </Text>
+          <SettingsInput type={SettingsInputType.SD} ml="auto" />
+        </HStack>
+        <Button onClick={onClickBack}>Back</Button>
       </Stack>
     </Box>
   );
