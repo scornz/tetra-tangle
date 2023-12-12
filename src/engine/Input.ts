@@ -1,4 +1,3 @@
-import { MOVEMENT } from "game/data";
 import { Engine } from "./Engine";
 
 /**
@@ -54,13 +53,16 @@ export const REVERSE_INPUT_MAP: { [key in InputType]: string } = {
   [InputType.HARD_DROP]: "Space",
 };
 
+/**
+ * Handles input from the user and sends out events to nthe necessary listeners
+ */
 export class Input {
   // The current keys being held down
   private keysHeld: Map<InputType, number> = new Map<InputType, number>();
   // All listeners on input
   private listeners: Set<(input: InputType) => void> = new Set<() => void>();
 
-  constructor(engine: Engine) {
+  constructor(_engine: Engine) {
     // Process keyboard down and up events
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
     window.addEventListener("keyup", this.handleKeyUp.bind(this));

@@ -2,6 +2,10 @@ import { Engine } from "./Engine";
 import * as THREE from "three";
 import { Entity } from "./Entity";
 
+/**
+ * Basic, unmoving camera that encapsulates the whole Tetris board. There
+ * isn't a ton of customization to be had here.
+ */
 export class Camera implements Entity {
   public instance!: THREE.PerspectiveCamera;
 
@@ -18,7 +22,6 @@ export class Camera implements Entity {
     );
     this.instance.position.z = 18;
     this.instance.position.y = 9.5;
-    //this.instance.rotation.y = Math.PI;
     this.engine.activeScene().add(this.instance);
   }
 

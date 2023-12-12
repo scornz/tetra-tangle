@@ -3,6 +3,10 @@ import { Entity } from "./Entity";
 import { Resource } from "./Resources";
 import { Engine } from "./Engine";
 
+/**
+ * A scene is a collection of entities that are rendered together. The
+ * scene is responsible for updating all entities in the scene as well.
+ */
 export class Scene extends THREE.Scene implements Entity {
   /**
    * All entities in the scene that need to be updated.

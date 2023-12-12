@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EventEmitter } from "./utilities/EventEmitter";
 
 export type Resource =
@@ -22,6 +22,11 @@ type Loaders = {
   cubeTexture: THREE.CubeTextureLoader;
 };
 
+/**
+ * The resources class is responsible for loading all of the assets that
+ * the game will need. This includes 3D models, textures, and audio. It is
+ * currently unused, but will be used in the future.
+ */
 export class Resources extends EventEmitter {
   private loadingManager = new THREE.LoadingManager(
     () => {
@@ -36,6 +41,8 @@ export class Resources extends EventEmitter {
     }
   );
   private loaders!: Loaders;
+  // @ts-ignore - This is populated by the loaders
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public items: Record<string, any> = {};
 
   constructor(private readonly resources: Resource[]) {
@@ -53,7 +60,7 @@ export class Resources extends EventEmitter {
   }
 
   getItem(name: string) {
-    let item = this.items[name];
+    const item = this.items[name];
     if (!item) {
       throw new Error(`Resource ${name} not found`);
     }

@@ -1,7 +1,6 @@
 import {
   Camera,
   Input,
-  Raycaster,
   RenderEngine,
   RenderLoop,
   Resources,
@@ -12,6 +11,11 @@ import {
 import { Loader } from "./interface";
 import { EventEmitter } from "./utilities";
 
+/**
+ * The main engine class. This is the entry point for the game, and is
+ * responsible for creating and managing the game loop, as well as the
+ * render loop.
+ */
 export class Engine extends EventEmitter {
   private static _instance: Engine;
   public static get instance() {
@@ -26,7 +30,6 @@ export class Engine extends EventEmitter {
 
   public readonly renderEngine!: RenderEngine;
   public readonly time!: RenderLoop;
-  public readonly raycaster!: Raycaster;
   public readonly sizes!: Sizes;
   public readonly canvas!: HTMLCanvasElement;
   public readonly resources!: Resources;
@@ -59,7 +62,6 @@ export class Engine extends EventEmitter {
     this.time = new RenderLoop(this);
     this._scene = new startScene(this);
     this.camera = new Camera(this);
-    this.raycaster = new Raycaster(this);
     this.renderEngine = new RenderEngine(this);
     this.resources = new Resources(this.scene.resources);
     this.loader = new Loader();

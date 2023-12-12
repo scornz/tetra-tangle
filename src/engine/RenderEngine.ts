@@ -12,6 +12,10 @@ import {
 } from "postprocessing";
 import { Scene } from "engine";
 
+/**
+ * The render engine is responsible for rendering the game scene, and
+ * handling any post-processing effects.
+ */
 export class RenderEngine implements Entity {
   private readonly renderer: WebGLRenderer;
   composer: EffectComposer;

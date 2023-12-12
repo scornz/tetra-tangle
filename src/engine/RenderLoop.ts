@@ -1,27 +1,30 @@
-import { Engine } from './Engine'
-import * as THREE from 'three'
+import { Engine } from "./Engine";
+import * as THREE from "three";
 
+/**
+ * The render loop is responsible for updating the game state and rendering.
+ */
 export class RenderLoop {
-  private clock: THREE.Clock
-  public deltaTime: number = 16
-  public currentTime: number = 0
+  private clock: THREE.Clock;
+  public deltaTime: number = 16;
+  public currentTime: number = 0;
 
   constructor(private engine: Engine) {
-    this.clock = new THREE.Clock()
-    window.requestAnimationFrame(() => this.update())
+    this.clock = new THREE.Clock();
+    window.requestAnimationFrame(() => this.update());
   }
 
   update() {
     const step = () => {
-      requestAnimationFrame(step)
-      const elapsedTime = this.clock.getElapsedTime()
+      requestAnimationFrame(step);
+      const elapsedTime = this.clock.getElapsedTime();
 
-      this.deltaTime = elapsedTime - this.currentTime
+      this.deltaTime = elapsedTime - this.currentTime;
 
-      this.currentTime = elapsedTime
+      this.currentTime = elapsedTime;
 
-      this.engine.update(this.deltaTime)
-    }
-    step()
+      this.engine.update(this.deltaTime);
+    };
+    step();
   }
 }
