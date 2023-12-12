@@ -3,3 +3,4 @@
  */
 
 export * from "./MainScene";
+export * from "./EmptyScene";

@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-import { Engine } from "engine/Engine";
-import { MainScene } from "game/scenes/MainScene";
+import { Engine } from "engine";
+import { EmptyScene } from "game/scenes";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -14,5 +14,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 new Engine({
   canvas: document.querySelector("#canvas") as HTMLCanvasElement,
-  startScene: MainScene,
+  startScene: EmptyScene,
 });
