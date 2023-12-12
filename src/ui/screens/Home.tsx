@@ -22,7 +22,7 @@ import { Settings } from ".";
 
 function Home() {
   const setAppState = useSetRecoilState(appStateAtom);
-  const [showSettings, setShowSettings] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
 
   return (
     <Box h="100%">
