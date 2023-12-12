@@ -1,5 +1,8 @@
 import { Global } from "@emotion/react";
 
+/**
+ * Install Open Sans and Ostrich Sans fonts.
+ */
 const Fonts = () => (
   <Global
     styles={`

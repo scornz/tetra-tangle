@@ -10,6 +10,7 @@ import {
 import { MOVEMENT } from "game/data";
 import { useState } from "react";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export enum SettingsInputType {
   ARR,
   DAS,
@@ -20,6 +21,10 @@ type Props = {
   type: SettingsInputType;
 };
 
+/**
+ * Used to control millisecond values in the settings page, this includes ARR,
+ * DAS, and SD.
+ */
 function SettingsInput({
   type,
   ...props

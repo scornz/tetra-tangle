@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { Box, Button, HStack, Stack, Text } from "@chakra-ui/react";
-import { Backdrop } from "ui/components";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { AppState, appStateAtom } from "state/app";
+import { Box, HStack, Stack, Text } from "@chakra-ui/react";
+import { useRecoilValue } from "recoil";
 import { levelAtom, linesClearedAtom, scoreAtom } from "state/game";
 
+/**
+ * The game screen, shows score and current level. Useful information for the
+ * player.
+ */
 function Game() {
   const score = useRecoilValue(scoreAtom);
   const linesCleared = useRecoilValue(linesClearedAtom);

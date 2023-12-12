@@ -2,10 +2,14 @@ import * as THREE from "three";
 import { Scene, Resource } from "engine";
 import { Game } from "game";
 
+/**
+ * The main scene of the game. This is where the game is played.
+ */
 export class MainScene extends Scene {
   resources: Resource[] = [];
 
   init() {
+    // Create basic geometry of the level
     const floor = new THREE.Mesh(
       new THREE.BoxGeometry(12, 1, 1),
       new THREE.MeshStandardMaterial({ color: 0xffffff })
@@ -28,6 +32,7 @@ export class MainScene extends Scene {
     rightWall.position.y = 9.5;
     rightWall.castShadow = true;
 
+    // Add all to the scene, including basic lighting
     this.add(floor);
     this.add(leftWall);
     this.add(rightWall);
@@ -39,6 +44,8 @@ export class MainScene extends Scene {
 
     this.add(directionalLight);
 
-    const game = new Game(this);
+    // Create new game attached to this scene
+    // This will create a board, preview, and hold, and manage the game completely
+    new Game(this);
   }
 }

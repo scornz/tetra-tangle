@@ -4,6 +4,11 @@ import { Board } from "game/containers";
 import { TETRIMINO_SHAPES } from "game/data";
 import { Cell, TETROMINO_COLORS, TetrominoType } from ".";
 
+/**
+ * A ghost tetromino is a tetromino that is displayed on the board and meant
+ * solely for previewing where a falling tetromino will land when placed on
+ * the board.
+ */
 export class GhostTetromino extends GameEntity {
   private cells: Cell[] = [];
 
@@ -30,6 +35,7 @@ export class GhostTetromino extends GameEntity {
     // Deep copy the positions
     positions = positions.map((pos) => pos.clone());
     // Update the position of the tetromino based on board positions
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       let filled = false;
       for (const pos of positions) {

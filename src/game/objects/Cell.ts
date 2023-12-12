@@ -2,6 +2,11 @@ import * as THREE from "three";
 import { GameEntity } from "engine/GameEntity";
 import { Scene } from "engine/Scene";
 
+/**
+ * A single cell in the game board. This is a simple cube with a color, and
+ * some sort of emission. This is used to represent a tetromino that has been
+ * dropped, is dropping, or is in the hold or preview sections.
+ */
 export class Cell extends GameEntity {
   material: THREE.MeshStandardMaterial;
 

@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
-import { Button, HStack, Stack, Text } from "@chakra-ui/react";
-import { Engine, INPUT_NAMES, InputType, REVERSE_INPUT_MAP } from "engine";
+import { HStack, Stack, Text } from "@chakra-ui/react";
+import { INPUT_NAMES, InputType, REVERSE_INPUT_MAP } from "engine";
 import { convertCodeToText } from "utils";
 
+/**
+ * A basic stack of all controls in the game, used to show a quick summary on
+ * the home page.
+ */
 function ListControls() {
   return (
     <Stack

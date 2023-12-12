@@ -6,6 +6,10 @@ import { submitScore } from "api/leaderboard";
 import { AppState, appStateAtom } from "state/app";
 import { useState } from "react";
 
+/**
+ * Allows player to submit their score to the leaderboard, or skip entirely
+ * to simply view the leaderboard.
+ */
 function SubmitScore() {
   const score = useRecoilValue(scoreAtom);
   const setAppState = useSetRecoilState(appStateAtom);

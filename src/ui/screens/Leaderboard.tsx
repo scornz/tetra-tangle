@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  HStack,
-  MenuIcon,
-  Spinner,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, HStack, Spinner, Stack, Text } from "@chakra-ui/react";
 import { Backdrop } from "ui/components";
 import { useSetRecoilState } from "recoil";
 import { ScoreEntry, getScores } from "api/leaderboard";
@@ -14,6 +6,9 @@ import { useEffect, useState } from "react";
 import { ArrowLeftIcon } from "@chakra-ui/icons";
 import { AppState, appStateAtom } from "state/app";
 
+/**
+ * Displays top 10 scores from the leaderboard.
+ */
 function Leaderboard() {
   const [scores, setScores] = useState<ScoreEntry[]>([]);
   const setAppState = useSetRecoilState(appStateAtom);

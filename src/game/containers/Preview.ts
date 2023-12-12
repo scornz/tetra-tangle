@@ -17,7 +17,7 @@ export class Preview extends GameEntity {
 
   constructor(
     protected scene: Scene,
-    private game: Game,
+    _game: Game,
     private numPreview: number,
     private pos: THREE.Vector3
   ) {
@@ -66,9 +66,5 @@ export class Preview extends GameEntity {
     }
 
     this.pieces[this.numPreview - 1] = cells;
-  }
-
-  update(delta: number): void {
-    // throw new Error("Method not implemented.");
   }
 }

@@ -10,6 +10,9 @@ type Props = {
   onClickBack: () => void;
 };
 
+/**
+ * Allows player to fully customize controls and movement of the game.
+ */
 function Settings({ onClickBack }: Props) {
   const [currentInput, setCurrentInput] = useState<null | InputType>(null);
 

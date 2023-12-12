@@ -1,17 +1,9 @@
 import * as THREE from "three";
-import vertexShader from "./shader.vert";
-import fragmentShader from "./shader.frag";
 import { Cell } from "game/objects/Cell";
-import { Engine } from "engine/Engine";
-import { Entity } from "engine/Entity";
 import { Scene } from "engine/Scene";
 import { GameEntity } from "engine/GameEntity";
 import { Game } from "game/Game";
-import {
-  Tetromino,
-  TetrominoClearType,
-  TetrominoType,
-} from "game/objects/Tetromino";
+import { Tetromino, TetrominoClearType } from "game/objects/Tetromino";
 import { ScoreType } from "game/data";
 import { lerp } from "three/src/math/MathUtils.js";
 
@@ -194,6 +186,7 @@ export class Board extends GameEntity {
    * @param clearType Type of line clear that this would be (tspin, etc.)
    */
   updateScore(cleared: number, clearType: TetrominoClearType) {
+    // @ts-ignore - This is a useful value to have, we just need to implement it later
     let difficult = false;
     let scoreType = null;
     switch (true) {

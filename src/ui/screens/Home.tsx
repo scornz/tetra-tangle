@@ -1,16 +1,7 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  HStack,
-  Image,
-  List,
-  Stack,
-  Text,
-  styled,
-} from "@chakra-ui/react";
-import { Backdrop, ListControls } from "ui/components";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { Box, Button, HStack, Image, Stack, Text } from "@chakra-ui/react";
+import { ListControls } from "ui/components";
+import { useSetRecoilState } from "recoil";
 import { AppState, appStateAtom } from "state/app";
 import { MainScene } from "game/scenes";
 import { Engine } from "engine";
@@ -20,6 +11,10 @@ import backgroundVideo from "assets/tetra-tangle-background.mp4";
 import { SettingsIcon, StarIcon } from "@chakra-ui/icons";
 import { Settings } from ".";
 
+/**
+ * The home screen, shown when the game is first opened. Allows the player to
+ * navigate to the game, leaderboard, and settings.
+ */
 function Home() {
   const setAppState = useSetRecoilState(appStateAtom);
   const [showSettings, setShowSettings] = useState(false);

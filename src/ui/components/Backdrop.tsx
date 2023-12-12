@@ -1,5 +1,8 @@
 import { Box } from "@chakra-ui/react";
 
+/**
+ * A fullscreen backdrop that can be used to dim the background.
+ */
 function Backdrop() {
   return (
     <Box
