@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { GameEntity } from "engine/GameEntity";
-import { Scene } from "engine/Scene";
+
+import { Scene, GameEntity } from "engine";
 
 /**
  * A single cell in the game board. This is a simple cube with a color, and

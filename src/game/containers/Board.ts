@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import { Cell } from "game/objects/Cell";
-import { Scene } from "engine/Scene";
-import { GameEntity } from "engine/GameEntity";
-import { Game } from "game/Game";
-import { Tetromino, TetrominoClearType } from "game/objects/Tetromino";
+import { GameEntity, Scene } from "engine";
+
+import { Game } from "game";
+import { Cell, Tetromino, TetrominoClearType } from "game/objects";
 import { ScoreType } from "game/data";
+
 import { lerp } from "three/src/math/MathUtils.js";
 
 /**

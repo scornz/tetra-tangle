@@ -1,5 +1,7 @@
 import * as THREE from "three";
+
 import { GameEntity, Scene } from "engine";
+
 import { Board } from "game/containers";
 import { TETRIMINO_SHAPES } from "game/data";
 import { Cell, TETROMINO_COLORS, TetrominoType } from ".";

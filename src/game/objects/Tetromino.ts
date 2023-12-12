@@ -1,4 +1,7 @@
 import * as THREE from "three";
+
+import { GameEntity, Input, InputType, Scene } from "engine";
+
 import { Cell, GhostTetromino } from "game/objects";
 import { Board } from "game/containers";
 import {
@@ -8,7 +11,6 @@ import {
   MOVEMENT,
 } from "game/data";
 import { Game } from "game";
-import { GameEntity, Input, InputType, Scene } from "engine";
 
 /**
  * The 7 tetromino types (plus an 8th debuggable)

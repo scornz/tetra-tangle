@@ -1,5 +1,6 @@
 import * as THREE from "three";
-import { TetrominoType } from "game/objects/Tetromino";
+
+import { TetrominoType } from "game/objects";
 
 /*
  * Information about the shape of a tetromino. Each tetromino has 4 possible

@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { Box, Button, HStack, Image, Stack, Text } from "@chakra-ui/react";
+import { SettingsIcon, StarIcon } from "@chakra-ui/icons";
+
 import { ListControls } from "ui/components";
 import { useSetRecoilState } from "recoil";
 import { AppState, appStateAtom } from "state/app";
+
 import { MainScene } from "game/scenes";
 import { Engine } from "engine";
 
 import logo from "assets/tetra-tangle.png";
 import backgroundVideo from "assets/tetra-tangle-background.mp4";
-import { SettingsIcon, StarIcon } from "@chakra-ui/icons";
+
 import { Settings } from ".";
 
 /**

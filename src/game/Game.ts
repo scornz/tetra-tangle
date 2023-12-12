@@ -1,12 +1,16 @@
 import * as THREE from "three";
+import { setRecoil } from "recoil-nexus";
+
 import { Scene, GameEntity, InputType } from "engine";
+
 import { Hold, Preview, Board } from "./containers";
 import { LevelBar, Tetromino, TetrominoType } from "./objects";
-import { shuffle } from "utils";
-import { setRecoil } from "recoil-nexus";
-import { levelAtom, linesClearedAtom, scoreAtom } from "state/game";
 import { SCORE_VALUES, ScoreType } from "./data";
+
+import { levelAtom, linesClearedAtom, scoreAtom } from "state/game";
 import { AppState, appStateAtom } from "state/app";
+
+import { shuffle } from "utils";
 
 /**
  * Manages a game of Tetris, including the board, spawning tetrominos, and

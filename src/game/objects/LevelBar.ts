@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { GameEntity } from "engine/GameEntity";
-import { Scene } from "engine/Scene";
+
+import { Scene, GameEntity } from "engine";
+
 import { lerp } from "three/src/math/MathUtils.js";
 
 /**

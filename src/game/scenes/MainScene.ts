@@ -1,5 +1,7 @@
 import * as THREE from "three";
+
 import { Scene, Resource } from "engine";
+
 import { Game } from "game";
 
 /**

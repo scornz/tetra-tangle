@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   HStack,
   Text,
@@ -8,7 +9,6 @@ import {
   NumberInputStepper,
 } from "@chakra-ui/react";
 import { MOVEMENT } from "game/data";
-import { useState } from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export enum SettingsInputType {
