@@ -49,6 +49,18 @@ export class Input {
     // Process keyboard down and up events
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
     window.addEventListener("keyup", this.handleKeyUp.bind(this));
+
+    // Load from local storage
+    const savedInputMap = localStorage.getItem("inputMap");
+    if (savedInputMap) {
+      const parsedInputMap = JSON.parse(savedInputMap);
+      for (const key in parsedInputMap) {
+        const input = parsedInputMap[key];
+        if (input in REVERSE_INPUT_MAP) {
+          this.setKey(input, key);
+        }
+      }
+    }
   }
 
   /**
@@ -64,6 +76,12 @@ export class Input {
   changeKey(input: InputType, key: string) {
     if (key in INPUT_MAP) return false;
 
+    this.setKey(input, key);
+    localStorage.setItem("inputMap", JSON.stringify(INPUT_MAP));
+    return true;
+  }
+
+  setKey(input: InputType, key: string) {
     const currentKey = REVERSE_INPUT_MAP[input];
     // Remove old key from input map
     delete INPUT_MAP[currentKey];
@@ -71,8 +89,6 @@ export class Input {
     // Update the input map
     INPUT_MAP[key] = input;
     REVERSE_INPUT_MAP[input] = key;
-
-    return true;
   }
 
   private handleKeyDown(event: KeyboardEvent) {

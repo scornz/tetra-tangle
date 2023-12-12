@@ -12,6 +12,7 @@ import {
 
 type Props = {
   onEnter: (input: string) => void;
+  initialValue?: string;
   placeholder?: string;
 };
 
@@ -22,11 +23,12 @@ type Props = {
  */
 function EnterInput({
   onEnter,
+  initialValue = "",
   placeholder = "Say something...",
   ...props
 }: Props & InputGroupProps) {
   // The contents of the text input
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialValue);
   const enter = () => {
     // Do not do anything if the input is empty
     if (input === "") return;
@@ -41,6 +43,7 @@ function EnterInput({
         borderRadius="full"
         focusBorderColor="gray.200"
         _focus={{ bg: "gray.200" }}
+        autoFocus={true}
         autoComplete="off"
         placeholder={placeholder}
         value={input}

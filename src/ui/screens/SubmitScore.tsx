@@ -18,6 +18,7 @@ function SubmitScore() {
     // Submit the score
     await submitScore(name, score);
     console.log(`Score submitted under name [${name}] and value [${score}]`);
+    localStorage.setItem("name", name);
     setAppState(AppState.LEADERBOARD);
   };
 
@@ -54,6 +55,7 @@ function SubmitScore() {
           {!loading ? (
             <EnterInput
               onEnter={uploadScore}
+              initialValue={localStorage.getItem("name") || ""}
               placeholder="Enter your name, then press enter..."
             />
           ) : (
