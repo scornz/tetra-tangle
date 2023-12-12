@@ -51,7 +51,7 @@ function Home() {
         justify="center"
         direction="column"
       >
-        <Image maxWidth="850px" width="100vmin" src={logo} />
+        <Image maxWidth="850px" minWidth="400px" width="100vmin" src={logo} />
         <HStack
           maxWidth="450px"
           width="100%"
