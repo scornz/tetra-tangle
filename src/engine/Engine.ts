@@ -9,7 +9,7 @@ import {
   Sizes,
 } from ".";
 
-import { DebugUI, InfoUI, Loader, InfoConfig } from "./interface";
+import { Loader } from "./interface";
 import { EventEmitter } from "./utilities";
 
 export class Engine extends EventEmitter {
@@ -26,9 +26,7 @@ export class Engine extends EventEmitter {
 
   public readonly renderEngine!: RenderEngine;
   public readonly time!: RenderLoop;
-  public readonly debug!: DebugUI;
   public readonly raycaster!: Raycaster;
-  public readonly infoUI!: InfoUI;
   public readonly sizes!: Sizes;
   public readonly canvas!: HTMLCanvasElement;
   public readonly resources!: Resources;
@@ -38,11 +36,9 @@ export class Engine extends EventEmitter {
   constructor({
     canvas,
     startScene,
-    info,
   }: {
     canvas: HTMLCanvasElement;
     startScene: typeof Scene;
-    info?: InfoConfig;
   }) {
     super();
 
@@ -60,12 +56,10 @@ export class Engine extends EventEmitter {
     this.canvas.setAttribute("tabindex", "0");
 
     this.sizes = new Sizes(this);
-    this.debug = new DebugUI();
     this.time = new RenderLoop(this);
     this._scene = new startScene(this);
     this.camera = new Camera(this);
     this.raycaster = new Raycaster(this);
-    this.infoUI = new InfoUI(info);
     this.renderEngine = new RenderEngine(this);
     this.resources = new Resources(this.scene.resources);
     this.loader = new Loader();
@@ -111,7 +105,6 @@ export class Engine extends EventEmitter {
     this.camera.update();
     this.renderEngine.update();
     this.scene.update(delta);
-    this.debug.update();
     this.input.update(delta);
   }
 
