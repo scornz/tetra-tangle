@@ -12,8 +12,12 @@
   </a>
 </p>
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/scornz/tetra-tangle/main/media/tetra-tangle.png" alt="Example gameplay" width="20%"/>
+</p>
+
 > A recreation of familiar block puzzle game, extrapolated to 2.5D. Created individually
-> as a final project for COS 426 (Computer Graphics) at Princeton University.
+> as a final project for COS 426 (Computer Graphics) at Princeton University in F'23.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/scornz/tetra-tangle/main/media/tetra-tangle-example.gif" alt="Example gameplay" width="50%"/>
