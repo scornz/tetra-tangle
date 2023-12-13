@@ -19,6 +19,17 @@
   <img src="https://raw.githubusercontent.com/scornz/tetra-tangle/main/media/tetra-tangle-example.gif" alt="Example gameplay" width="50%"/>
 </p>
 
+<p align="center">
+  Play the game on desktop
+  <a href="https://tetra.mscornz.com"> here </a>
+  and read the final report
+  <a href="https://github.com/scornz/tetra-tangle/blob/main/final-report.pdf">here</a>.
+</p>
+
+## Abstract
+
+This project represents the development of a block puzzle game completely compliant with the annually released Guideline from the Tetris Company [[1](#1)]. This includes but is not limited to, frame-perfect controls, the Super Rotation System (SRS), and the extended placement lockdown mechanism. The engine is built in Typescript, solely off of the three.js library, while the user interface overlay is created via React. Other features include fully customizable controls, a public leaderboard, and visual enhancements such as selective bloom. The project is composed of 2,796 lines of code and is thoroughly documented and well-structured, making it suitable as a template for others.
+
 ## Requirements
 
 - `yarn` ([download](https://classic.yarnpkg.com/lang/en/docs/install))
@@ -35,4 +46,9 @@
 ## License
 
 Copyright © 2023 [Mike Scornavacca](https://github.com/scornz).<br />
-This project is [MIT](https://github.com/scornz/taj-assassin/blob/main/LICENSE) licensed.
+This project is [MIT](https://github.com/scornz/tetra-tangle/blob/main/LICENSE) licensed.
+
+## References
+
+[<a id="1">1</a>]
+Blue Planet Software, Inc. Tetris Design Guideline. PDF document. Accessed: 12-December-2023. 2009.
