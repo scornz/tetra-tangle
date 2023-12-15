@@ -39,7 +39,7 @@ export const SCORE_VALUES: { [key in ScoreType]: number } = {
   [ScoreType.TSPIN_TRIPLE]: 1600,
 
   /* Back-to-back difficult line clear multiplier */
-  [ScoreType.BACK_TO_BACK]: 1.5,
+  [ScoreType.BACK_TO_BACK]: 0.5,
 
   /* Points per consecutive combo */
   [ScoreType.COMBO]: 50,

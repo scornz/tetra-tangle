@@ -73,6 +73,9 @@ export class Board extends GameEntity {
    */
   private layoutCells: Cell[][];
 
+  //
+  private backToBack: boolean = false;
+
   constructor(
     protected scene: Scene,
     public readonly game: Game,
@@ -237,8 +240,25 @@ export class Board extends GameEntity {
         break;
     }
 
+    if (scoreType == null) return;
+
     // Add the score to the final score
-    if (scoreType != null) this.game.addScore(scoreType, 0, cleared);
+    this.game.addScore(scoreType, 0, cleared);
+
+    // If back to back is true and the last line clear was difficult and more than 0 lines were cleared
+    if (this.backToBack && difficult && cleared > 0) {
+      // Add a back to back bonus
+      console.log("HERE");
+      this.game.addScore(ScoreType.BACK_TO_BACK, -1, 0);
+    }
+
+    // If the last line clear was difficult, enable back to back
+    if (difficult) {
+      this.backToBack = true;
+    } else {
+      // Otherwise disable it
+      this.backToBack = false;
+    }
   }
 
   /**
