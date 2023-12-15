@@ -6,13 +6,11 @@ import { ListControls } from "ui/components";
 import { useSetRecoilState } from "recoil";
 import { AppState, appStateAtom } from "state/app";
 
-import { MainScene } from "game/scenes";
-import { Engine } from "engine";
-
 import logo from "assets/tetra-tangle.png";
 import backgroundVideo from "assets/tetra-tangle-background.mp4";
 
 import { Settings } from ".";
+import { beginGame } from "game";
 
 /**
  * The home screen, shown when the game is first opened. Allows the player to
@@ -72,8 +70,8 @@ function Home() {
             flexGrow={1}
             rounded="20"
             onClick={() => {
-              Engine.instance.setScene(MainScene);
-              setAppState(AppState.PLAYING);
+              // Start the game and reset all atoms
+              beginGame();
             }}
           >
             <Text fontSize="55px" fontFamily="special">

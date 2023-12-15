@@ -1,16 +1,33 @@
 import * as THREE from "three";
 import { setRecoil } from "recoil-nexus";
 
-import { Scene, GameEntity, InputType } from "engine";
+import { Scene, GameEntity, InputType, Engine } from "engine";
 
 import { Hold, Preview, Board } from "./containers";
 import { LevelBar, Tetromino, TetrominoType } from "./objects";
 import { SCORE_VALUES, ScoreType } from "./data";
+import { MainScene } from "./scenes";
 
 import { levelAtom, linesClearedAtom, scoreAtom } from "state/game";
 import { AppState, appStateAtom } from "state/app";
 
 import { shuffle } from "utils";
+
+/**
+ * Quick helper function to load a scene, reset atoms, and begin a new game.
+ */
+export const beginGame = () => {
+  // Change the scene
+  Engine.instance.setScene(MainScene);
+
+  // Update the atoms
+  setRecoil(levelAtom, 1);
+  setRecoil(linesClearedAtom, 0);
+  setRecoil(scoreAtom, 0);
+
+  // Swap the app state to playing
+  setRecoil(appStateAtom, AppState.PLAYING);
+};
 
 /**
  * Manages a game of Tetris, including the board, spawning tetrominos, and

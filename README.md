@@ -25,7 +25,7 @@
 
 <p align="center">
   Play the game on desktop
-  <a href="https://tetra.mscornz.com"> here </a>
+  <a href="https://tetra.mscornz.com">here</a>
   and read the final report
   <a href="https://github.com/scornz/tetra-tangle/blob/main/final-report.pdf">here</a>.
 </p>
