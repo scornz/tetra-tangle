@@ -29,7 +29,7 @@ export const ALL_SOUND_EFFECTS = {
   combo_15: "audio/combo_15.mp3",
   combo_16: "audio/combo_16.mp3",
   combobreak: "audio/combobreak.mp3",
-  harddrop: "audio/harddrop.mp3",
+  place: "audio/place.mp3",
   hold: "audio/hold.mp3",
   move: "audio/move.mp3",
   rotate: "audio/rotate.mp3",

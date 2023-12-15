@@ -178,8 +178,6 @@ export class Tetromino extends GameEntity {
         break;
       case InputType.HARD_DROP:
         this.place();
-        // Play sound only if placement is through hard drop action
-        this.scene.engine.audio.play("harddrop");
         break;
     }
   }
@@ -215,7 +213,7 @@ export class Tetromino extends GameEntity {
     if (this.type == TetrominoType.O) {
       this.moveCounter++;
       this.lastMoveRotation = true;
-      this.scene.engine.audio.play("rotate");
+      this.scene.engine.audio.play("rotate", 0.3);
       return true;
     }
 
@@ -401,6 +399,9 @@ export class Tetromino extends GameEntity {
     if (this.softDropped > 0) {
       this.board.game.addScore(ScoreType.SOFT_DROP, this.softDropped);
     }
+
+    // Play sound only if placement is through hard drop action
+    this.scene.engine.audio.play("place");
 
     // Update the positions from the instantstaneous drop
     this.updateCellPositions();
