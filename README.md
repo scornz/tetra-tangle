@@ -34,7 +34,7 @@
 
 ## Abstract
 
-This project represents the development of a block puzzle game completely compliant with the annually released Guideline from the Tetris Company [[1](#1)]. This includes but is not limited to, frame-perfect controls, the Super Rotation System (SRS), and the extended placement lockdown mechanism. The engine is built in Typescript, solely off of the three.js library, while the user interface overlay is created via React. Other features include fully customizable controls, a public leaderboard, and visual enhancements such as selective bloom. The project is composed of 2,796 lines of code and is thoroughly documented and well-structured, making it suitable as a template for others.
+This project represents the development of a block puzzle game completely compliant with the annually released Guideline from the Tetris Company [[1](#1)]. This includes but is not limited to, frame-perfect controls, the Super Rotation System (SRS), and the extended placement lockdown mechanism. The engine is built in Typescript, solely off of the three.js library, while the user interface overlay is created via React. Other features include fully customizable controls, a public leaderboard, and visual enhancements such as selective bloom. The project is composed of 3,043 lines of code and is thoroughly documented and well-structured, making it suitable as a template for others.
 
 ## Requirements
 
