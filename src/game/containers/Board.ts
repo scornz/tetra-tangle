@@ -73,8 +73,15 @@ export class Board extends GameEntity {
    */
   private layoutCells: Cell[][];
 
-  //
+  /*
+   * Whether or not the last line clear was a back to back clear (difficult)
+   */
   private backToBack: boolean = false;
+
+  /**
+   * Current combo count, starts at -1 so a minimum of 2 moves is required
+   */
+  private combo: number = -1;
 
   constructor(
     protected scene: Scene,
@@ -240,16 +247,23 @@ export class Board extends GameEntity {
         break;
     }
 
+    // Reset combo if no lines were cleared
+    if (cleared == 0) this.combo = -1;
     if (scoreType == null) return;
 
+    this.combo++;
     // Add the score to the final score
     this.game.addScore(scoreType, 0, cleared);
 
     // If back to back is true and the last line clear was difficult and more than 0 lines were cleared
     if (this.backToBack && difficult && cleared > 0) {
       // Add a back to back bonus
-      console.log("HERE");
       this.game.addScore(ScoreType.BACK_TO_BACK, -1, 0);
+    }
+
+    if (this.combo > 0) {
+      // Add a combo bonus
+      this.game.addScore(ScoreType.COMBO, this.combo);
     }
 
     // If the last line clear was difficult, enable back to back

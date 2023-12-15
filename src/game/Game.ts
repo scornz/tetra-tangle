@@ -130,14 +130,15 @@ export class Game extends GameEntity {
    * @param val An additional value to add to the score (usually the number of cells dropped)
    */
   addScore(scoreType: ScoreType, val: number = 0, lines: number = 0) {
-    // TODO: Implement combo
-
     // val in this case is the number of cells dropped
     if (scoreType == ScoreType.SOFT_DROP || scoreType == ScoreType.HARD_DROP) {
       this.score += val * SCORE_VALUES[scoreType];
     } else if (scoreType == ScoreType.BACK_TO_BACK) {
       // Add the back to back multiplier to the last score type
       this.score += SCORE_VALUES[ScoreType.BACK_TO_BACK] * this.lastScoreAmount;
+    } else if (scoreType == ScoreType.COMBO) {
+      // score value * combo count * current level
+      this.score += SCORE_VALUES[ScoreType.COMBO] * val * this.level;
     }
     // val does not matter, so we just multiply by the score value
     else {
