@@ -9,6 +9,7 @@ import {
   JLTSZ_WALL_KICKS,
   TETRIMINO_SHAPES,
   MOVEMENT,
+  ScoreType,
 } from "game/data";
 import { Game } from "game";
 
@@ -97,6 +98,9 @@ export class Tetromino extends GameEntity {
   // Move counters used for lock down timer
   private moveCounter: number = 0;
   private prevMoveCounter: number = 0;
+
+  // The number of rows this has been soft dropped
+  private softDropped: number = 0;
 
   private _placed: boolean = false;
   get placed(): boolean {
@@ -369,7 +373,20 @@ export class Tetromino extends GameEntity {
    */
   place(): void {
     // Keep moving until the piece stops
-    while (this.move(0, -1));
+    let dropped = 0;
+    while (this.move(0, -1)) {
+      dropped++;
+    }
+
+    // If the piece was dropped, add to the score using hard drop scoring
+    if (dropped > 0) {
+      this.board.game.addScore(ScoreType.HARD_DROP, dropped);
+    }
+
+    // Add soft drop scoring if necessary
+    if (this.softDropped > 0) {
+      this.board.game.addScore(ScoreType.SOFT_DROP, this.softDropped);
+    }
 
     // Update the positions from the instantstaneous drop
     this.updateCellPositions();
@@ -401,6 +418,7 @@ export class Tetromino extends GameEntity {
       while (this.softDropTime > MOVEMENT.SD && moved) {
         this.softDropTime -= MOVEMENT.SD;
         moved = this.move(0, -1);
+        this.softDropped += 1;
       }
     }
 
