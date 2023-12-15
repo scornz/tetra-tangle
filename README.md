@@ -26,8 +26,10 @@
 <p align="center">
   Play the game on desktop
   <a href="https://tetra.mscornz.com">here</a>
-  and read the final report
-  <a href="https://github.com/scornz/tetra-tangle/blob/main/final-report.pdf">here</a>.
+  , read the final report
+  <a href="https://github.com/scornz/tetra-tangle/blob/main/final-report.pdf">here</a>, and
+  watch the live demo here
+  <a href="https://youtu.be/Duq8CGbpBBo">here.</a>
 </p>
 
 ## Abstract
