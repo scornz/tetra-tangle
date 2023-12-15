@@ -78,6 +78,11 @@ export class Board extends GameEntity {
    */
   private backToBack: boolean = false;
 
+  /*
+   * Number of back to backs solely for the purpose of playing the sound
+   */
+  private backToBackCount: number = 0;
+
   /**
    * Current combo count, starts at -1 so a minimum of 2 moves is required
    */
@@ -251,6 +256,13 @@ export class Board extends GameEntity {
     if (cleared == 0) this.combo = -1;
     if (scoreType == null) return;
 
+    // Play a sound if we cleared a line or a quad
+    if (cleared === 4) {
+      this.scene.engine.audio.play("clearquad");
+    } else {
+      this.scene.engine.audio.play("clearline");
+    }
+
     this.combo++;
     // Add the score to the final score
     this.game.addScore(scoreType, 0, cleared);
@@ -259,19 +271,29 @@ export class Board extends GameEntity {
     if (this.backToBack && difficult && cleared > 0) {
       // Add a back to back bonus
       this.game.addScore(ScoreType.BACK_TO_BACK, -1, 0);
+      this.backToBackCount++;
+      this.scene.engine.audio.play(`btb_${Math.min(this.backToBackCount, 3)}`);
     }
 
     if (this.combo > 0) {
       // Add a combo bonus
       this.game.addScore(ScoreType.COMBO, this.combo);
+      // Play the combo sound
+      this.scene.engine.audio.play(`combo_${Math.min(this.combo, 16)}`);
     }
 
     // If the last line clear was difficult, enable back to back
     if (difficult) {
       this.backToBack = true;
     } else {
+      if (this.backToBackCount > 0) {
+        // We broke the back to back chain, play the break sound
+        this.scene.engine.audio.play("btb_break");
+      }
+
       // Otherwise disable it
       this.backToBack = false;
+      this.backToBackCount = 0;
     }
   }
 

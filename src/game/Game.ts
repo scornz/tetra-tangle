@@ -191,6 +191,7 @@ export class Game extends GameEntity {
   gameOver() {
     // Change app state to submit a score
     setRecoil(appStateAtom, AppState.SUBMIT_SCORE);
+    this.scene.engine.audio.play("topout");
   }
 
   /**

@@ -146,16 +146,26 @@ export class Tetromino extends GameEntity {
     this.scene.engine.input.addListener(this.handleInputCallback);
   }
 
+  /**
+   * Handles input and specialized audio for input feedback
+   */
   handleInput(input: InputType): void {
     // Go through available input and handle accordingly
     switch (input) {
       case InputType.MOVE_LEFT:
-        this.move(-1, 0);
+        if (this.move(-1, 0)) {
+          // Only play sound upon successful move action
+          this.scene.engine.audio.play("move");
+        }
         break;
       case InputType.MOVE_RIGHT:
-        this.move(1, 0);
+        if (this.move(1, 0)) {
+          // Only play sound upong successful move
+          this.scene.engine.audio.play("move");
+        }
         break;
       case InputType.ROTATE_LEFT:
+        // Handle audio within function
         this.rotate((this.rot + 3) % 4);
         break;
       case InputType.ROTATE_RIGHT:
@@ -168,6 +178,8 @@ export class Tetromino extends GameEntity {
         break;
       case InputType.HARD_DROP:
         this.place();
+        // Play sound only if placement is through hard drop action
+        this.scene.engine.audio.play("harddrop");
         break;
     }
   }
@@ -203,6 +215,7 @@ export class Tetromino extends GameEntity {
     if (this.type == TetrominoType.O) {
       this.moveCounter++;
       this.lastMoveRotation = true;
+      this.scene.engine.audio.play("rotate");
       return true;
     }
 
@@ -224,6 +237,7 @@ export class Tetromino extends GameEntity {
       this.pos.copy(newPos);
       this.moveCounter++;
       this.lastMoveRotation = true;
+      this.scene.engine.audio.play("rotate");
       return true;
     }
 
