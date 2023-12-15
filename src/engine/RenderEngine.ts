@@ -6,11 +6,13 @@ import { Entity } from "./Entity";
 import {
   BlendFunction,
   BloomEffect,
+  ChromaticAberrationEffect,
   EffectComposer,
   EffectPass,
   RenderPass,
 } from "postprocessing";
 import { Scene } from "engine";
+import { lerp } from "three/src/math/MathUtils.js";
 
 /**
  * The render engine is responsible for rendering the game scene, and
@@ -20,6 +22,7 @@ export class RenderEngine implements Entity {
   private readonly renderer: WebGLRenderer;
   composer: EffectComposer;
   private pass: RenderPass;
+  private chromaticOffset: THREE.Vector2 = new THREE.Vector2(0, 0);
 
   constructor(private engine: Engine) {
     this.renderer = new WebGLRenderer({
@@ -55,19 +58,43 @@ export class RenderEngine implements Entity {
         })
       )
     );
+    this.composer.addPass(
+      new EffectPass(
+        this.engine.camera.instance,
+        new ChromaticAberrationEffect({
+          radialModulation: true,
+          modulationOffset: 0.15,
+          offset: this.chromaticOffset,
+        })
+      )
+    );
 
     engine.on("sceneChanged", (newScene: Scene) => {
       this.pass.mainScene = newScene;
     });
   }
 
-  update() {
+  update(delta: number) {
     this.composer.render();
+
+    // Slowly move the chromatic offset back to 0
+    this.chromaticOffset.set(
+      lerp(this.chromaticOffset.x, 0, delta * 3),
+      lerp(this.chromaticOffset.y, 0, delta * 3)
+    );
   }
 
   resize() {
     this.renderer.setSize(this.engine.sizes.width, this.engine.sizes.height);
     this.composer.setSize(this.engine.sizes.width, this.engine.sizes.height);
     this.composer.render();
+  }
+
+  /**
+   * "Punch" the render engine with a chromatic offset. This is used to show
+   * emphasis and feedback to the user.
+   */
+  punch(amount: number) {
+    this.chromaticOffset.set(0.005 * amount, 0.005 * amount);
   }
 }

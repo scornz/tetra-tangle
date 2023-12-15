@@ -105,7 +105,7 @@ export class Engine extends EventEmitter {
     if (!this.loader.isComplete) return;
 
     this.camera.update();
-    this.renderEngine.update();
+    this.renderEngine.update(delta);
     this.scene.update(delta);
     this.input.update(delta);
   }

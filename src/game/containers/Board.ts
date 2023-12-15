@@ -129,6 +129,12 @@ export class Board extends GameEntity {
     const clearType = tetromino.checkClearType();
     // Check cleared lines, and whether or not this was a t-spin
     const cleared = this.checkLines();
+
+    if (cleared > 0) {
+      // "Punch" the render engine to make it do something funny
+      this.scene.engine.renderEngine.punch(cleared);
+    }
+
     this.updateScore(cleared, clearType);
   }
 
