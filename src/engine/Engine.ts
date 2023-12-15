@@ -6,6 +6,7 @@ import {
   Resources,
   Scene,
   Sizes,
+  Audio,
 } from ".";
 
 import { Loader } from "./interface";
@@ -28,6 +29,7 @@ export class Engine extends EventEmitter {
     return this._scene;
   }
 
+  public readonly audio!: Audio;
   public readonly renderEngine!: RenderEngine;
   public readonly time!: RenderLoop;
   public readonly sizes!: Sizes;
@@ -66,6 +68,7 @@ export class Engine extends EventEmitter {
     this.resources = new Resources(this.scene.resources);
     this.loader = new Loader();
     this.input = new Input(this);
+    this.audio = new Audio(this, this.camera);
 
     // Set the engine atom to this engine
     Engine._instance = this;

@@ -12,3 +12,4 @@ export * from "./RenderLoop";
 export * from "./Resources";
 export * from "./Scene";
 export * from "./Sizes";
+export * from "./Audio";

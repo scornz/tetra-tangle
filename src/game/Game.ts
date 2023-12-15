@@ -119,6 +119,7 @@ export class Game extends GameEntity {
         this.tetromino!.demolish();
         this.spawn();
       }
+      this.scene.engine.audio.play("hold");
       // Prevent user from holding another piece until another one spawns
       this.alreadyHeld = true;
     }
