@@ -12,6 +12,7 @@ export enum InputType {
   HOLD,
   SOFT_DROP,
   HARD_DROP,
+  QUICK_RESET,
 }
 
 /**
@@ -26,6 +27,7 @@ export const INPUT_NAMES: { [key in InputType]: string } = {
   [InputType.HOLD]: "Hold Piece",
   [InputType.SOFT_DROP]: "Soft Drop",
   [InputType.HARD_DROP]: "Hard Drop",
+  [InputType.QUICK_RESET]: "Quick Reset",
 };
 
 /**
@@ -40,6 +42,7 @@ export const INPUT_MAP: { [key: string]: InputType } = {
   KeyC: InputType.HOLD,
   ArrowDown: InputType.SOFT_DROP,
   Space: InputType.HARD_DROP,
+  Backquote: InputType.QUICK_RESET,
 };
 
 export const REVERSE_INPUT_MAP: { [key in InputType]: string } = {
@@ -51,6 +54,7 @@ export const REVERSE_INPUT_MAP: { [key in InputType]: string } = {
   [InputType.HOLD]: "KeyC",
   [InputType.SOFT_DROP]: "ArrowDown",
   [InputType.HARD_DROP]: "Space",
+  [InputType.QUICK_RESET]: "Backquote",
 };
 
 /**

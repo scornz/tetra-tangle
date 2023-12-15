@@ -59,6 +59,11 @@ export class Game extends GameEntity {
 
   private lastScoreAmount: ScoreType = 0;
 
+  /**
+   * How many seconds has this game been running for?
+   */
+  private timer: number = 0;
+
   // Callback for handling movement, store this for later removal
   private handleInputCallback: (input: InputType) => void;
 
@@ -104,6 +109,13 @@ export class Game extends GameEntity {
   }
 
   handleInput(input: InputType) {
+    // Only allow a quick reset a second after the game has started
+    if (input == InputType.QUICK_RESET && this.active && this.timer > 1) {
+      this.active = false;
+      // Quickly reload the scene, resetting the game
+      beginGame();
+    }
+
     if (input == InputType.HOLD && !this.alreadyHeld) {
       if (this.heldTetromino) {
         // If there is already a held tetromino, then swap it with the current
@@ -235,7 +247,8 @@ export class Game extends GameEntity {
     return nextPiece;
   }
 
-  update(_delta: number): void {
+  update(delta: number): void {
+    this.timer += delta;
     if (this.tetromino?.placed && this.active) {
       this.spawn();
     }
