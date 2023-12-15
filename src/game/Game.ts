@@ -147,30 +147,16 @@ export class Game extends GameEntity {
   }
 
   updateLevelandSpeed(lines: number) {
+    // Fixed goal system, shorter games
     this.level = Math.floor(this.linesCleared / 10) + 1;
     this.levelBar.addProgress(lines / 10);
 
     setRecoil(levelAtom, this.level);
     setRecoil(linesClearedAtom, this.linesCleared);
 
-    // Calculate drop speed based on frames per row
-    // Most Tetris games were based on 60fps systems
-    let framesPerDrop = 0;
-    if (this.level < 10) {
-      framesPerDrop = 48 / this.level - 0.5;
-    } else if (this.level <= 12) {
-      framesPerDrop = 5;
-    } else if (this.level <= 15) {
-      framesPerDrop = 4;
-    } else if (this.level <= 18) {
-      framesPerDrop = 3;
-    } else if (this.level <= 28) {
-      framesPerDrop = 2;
-    } else {
-      framesPerDrop = 1;
-    }
-    // Convert speed to seconds
-    this.speed = framesPerDrop / 60;
+    // Use the level to calculate the speed
+    // Taken from 2009 Tetris Design Guideline
+    this.speed = (0.8 - (this.level - 1) * 0.007) ** (this.level - 1);
 
     console.log(`Current level (${this.level}) and speed (${this.speed})`);
   }
