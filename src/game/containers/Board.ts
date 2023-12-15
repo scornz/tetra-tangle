@@ -132,7 +132,7 @@ export class Board extends GameEntity {
 
     if (cleared > 0) {
       // "Punch" the render engine to make it do something funny
-      this.scene.engine.renderEngine.punch(cleared);
+      this.scene.engine.renderEngine.punch(cleared, tetromino.getCellsCenter());
     }
 
     this.updateScore(cleared, clearType);
@@ -265,7 +265,7 @@ export class Board extends GameEntity {
 
         cell.material.emissiveIntensity = lerp(
           cell.material.emissiveIntensity,
-          0.5,
+          1,
           delta
         );
       }

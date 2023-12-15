@@ -336,6 +336,18 @@ export class Tetromino extends GameEntity {
   }
 
   /**
+   * Return the center of the cells that make up this tetromino.
+   */
+  getCellsCenter(): THREE.Vector3 {
+    const position = new THREE.Vector3();
+    for (const cell of this.cells) {
+      position.add(cell.obj.position);
+    }
+    position.divideScalar(this.cells.length);
+    return position;
+  }
+
+  /**
    * Check if the board has blocks immediatley below any of these cells. If so,
    * this should engage a lock down of the tetromino.
    */

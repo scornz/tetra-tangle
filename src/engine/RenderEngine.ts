@@ -7,6 +7,7 @@ import {
   BlendFunction,
   BloomEffect,
   ChromaticAberrationEffect,
+  ShockWaveEffect,
   EffectComposer,
   EffectPass,
   RenderPass,
@@ -22,7 +23,9 @@ export class RenderEngine implements Entity {
   private readonly renderer: WebGLRenderer;
   composer: EffectComposer;
   private pass: RenderPass;
+
   private chromaticOffset: THREE.Vector2 = new THREE.Vector2(0, 0);
+  private shockwave: ShockWaveEffect;
 
   constructor(private engine: Engine) {
     this.renderer = new WebGLRenderer({
@@ -58,6 +61,21 @@ export class RenderEngine implements Entity {
         })
       )
     );
+
+    this.shockwave = new ShockWaveEffect(
+      this.engine.camera.instance,
+      new THREE.Vector3(),
+      {
+        speed: 2,
+        maxRadius: 0.5,
+        waveSize: 0.4,
+        amplitude: 0.015,
+      }
+    );
+    this.composer.addPass(
+      new EffectPass(this.engine.camera.instance, this.shockwave)
+    );
+
     this.composer.addPass(
       new EffectPass(
         this.engine.camera.instance,
@@ -79,8 +97,8 @@ export class RenderEngine implements Entity {
 
     // Slowly move the chromatic offset back to 0
     this.chromaticOffset.set(
-      lerp(this.chromaticOffset.x, 0, delta * 3),
-      lerp(this.chromaticOffset.y, 0, delta * 3)
+      lerp(this.chromaticOffset.x, 0, delta * 4),
+      lerp(this.chromaticOffset.y, 0, delta * 4)
     );
   }
 
@@ -94,7 +112,10 @@ export class RenderEngine implements Entity {
    * "Punch" the render engine with a chromatic offset. This is used to show
    * emphasis and feedback to the user.
    */
-  punch(amount: number) {
-    this.chromaticOffset.set(0.005 * amount, 0.005 * amount);
+  punch(amount: number, position: THREE.Vector3) {
+    this.chromaticOffset.set(0.005 + amount * 0.0015, 0.005);
+    this.shockwave.position = position;
+    this.shockwave.maxRadius = 0.75 * amount;
+    this.shockwave.explode();
   }
 }
