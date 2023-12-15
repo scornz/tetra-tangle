@@ -253,7 +253,15 @@ export class Board extends GameEntity {
     }
 
     // Reset combo if no lines were cleared
-    if (cleared == 0) this.combo = -1;
+    if (cleared == 0) {
+      // Play combo break audio if this was a break
+      if (this.combo > 0) {
+        console;
+        this.scene.engine.audio.play("combobreak");
+      }
+      this.combo = -1;
+    }
+
     if (scoreType == null) return;
 
     // Play a sound if we cleared a line or a quad
