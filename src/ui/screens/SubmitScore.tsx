@@ -53,7 +53,7 @@ function SubmitScore() {
           color="white"
           textAlign="center"
         >
-          {score.toString().padStart(6, "0")}
+          {score.toString().padStart(7, "0")}
         </Text>
         <Box height="100px" width="100%" display="flex" justifyContent="center">
           {!loading ? (

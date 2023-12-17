@@ -101,7 +101,7 @@ function Leaderboard() {
                     color={getColor(index)}
                     ml="auto"
                   >
-                    {score.score.toString().padStart(6, "0")}
+                    {score.score.toString().padStart(7, "0")}
                   </Text>
                 </HStack>
               );
