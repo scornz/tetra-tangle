@@ -174,9 +174,12 @@ export class Game extends GameEntity {
     setRecoil(levelAtom, this.level);
     setRecoil(linesClearedAtom, this.linesCleared);
 
+    // Cap the level so we don't get infinite speed
+    // Game starts to break at level 32
+    const cappedLevel = Math.min(this.level, 30);
     // Use the level to calculate the speed
     // Taken from 2009 Tetris Design Guideline
-    this.speed = (0.8 - (this.level - 1) * 0.007) ** (this.level - 1);
+    this.speed = (0.8 - (cappedLevel - 1) * 0.007) ** (cappedLevel - 1);
 
     console.log(`Current level (${this.level}) and speed (${this.speed})`);
   }
