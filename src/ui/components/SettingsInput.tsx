@@ -59,7 +59,7 @@ function SettingsInput({
             MOVEMENT.DAS = value / 1000;
             localStorage.setItem("das", (value / 1000).toString());
           } else if (type === SettingsInputType.SD) {
-            MOVEMENT.DAS = value / 1000;
+            MOVEMENT.SD = value / 1000;
             localStorage.setItem("sd", (value / 1000).toString());
           }
         }}
